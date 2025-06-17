@@ -8,10 +8,14 @@
 				</div>
 
 				<!-- Navigation Button -->
-				<nav>
+				<nav class="gap-2 flex">
 					<button
 						class="border border-blue-500 text-sm px-5 py-2 font-medium text-blue-500 rounded-xl hover:bg-blue-50 transition">
 						Panggil Pelayan
+					</button>
+					<button
+						class="border bg-blue-500 text-sm px-5 py-2 font-medium text-white rounded-xl hover:bg-blue-50 transition">
+						Login
 					</button>
 				</nav>
 			</div>
