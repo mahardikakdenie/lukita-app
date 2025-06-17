@@ -41,7 +41,7 @@
 
 								<!-- Description -->
 								<p class="text-sm text-gray-600 line-clamp-2">
-									Gudeg Yogya gurih lengkap dengan Lorem ipsum
+									Gudeg Jogja gurih lengkap dengan Lorem ipsum
 									dolor sit amet, consectetur adipisicing
 									elit.
 								</p>
@@ -134,7 +134,30 @@
 					</div>
 					<hr class="border-gray-200 mt-5" />
 					<div>
-						<div>ha</div>
+						<div class="grid grid-cols-3 gap-2">
+							<div>
+								<img src="https://asset.kompas.com/crops/RKyE9n689Ni8jPjt-iO_1jFuV0w=/203x225:749x589/1200x800/data/photo/2022/12/09/6392a51cdec7d.jpg" class="rounded-xl" alt="" srcset="">
+							</div>
+
+							<div class="col-span-2">
+								<div class="flex justify-between">
+									<div>
+										<span class="font-semibold text-sm">Nasi Gudeg Jogja</span>
+										<br>
+										<span
+										class="text-sm text-yellow-500 font-medium bg-yellow-50 px-2 py-1 rounded-full"
+										>⭐ Andalan</span
+									>
+									</div>
+
+									<div>
+										<span class="text-blue-600 font-bold"
+										>Rp28.000</span
+									>
+									</div>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
