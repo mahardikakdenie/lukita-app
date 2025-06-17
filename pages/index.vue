@@ -3,159 +3,126 @@
 		<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
 			<!-- Kategori Menu -->
 			<div class="sm:col-span-2">
-				<ul
-					class="flex flex-nowrap gap-4 overflow-x-auto scroll-smooth scrollbar-thin scrollbar-thumb-blue-400 scrollbar-track-gray-100 py-2 px-1 rounded-lg bg-white">
-					<li v-for="(menu, i) in menus" :key="i" class="shrink-0">
-						<button
-							@click="currentMenu = menu"
-							class="px-5 py-2 text-sm font-medium rounded-lg transition-all duration-300 ease-in-out whitespace-nowrap"
-							:class="
-								currentMenu === menu
-									? 'bg-blue-100 text-blue-700 border-blue-700 border'
-									: 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
-							">
-							{{ menu }}
-						</button>
-					</li>
-				</ul>
+				<HeaderMenu
+					:menus="menus"
+					:current-menu="currentMenu"
+					@on-set-menu="(menu) => (currentMenu = menu)" />
 				<hr class="border-gray-200" />
 
-				<div class="mt-4">
-					<!-- Context -->
-					<div class="grid sm:grid-cols-3 gap-2 grid-cols-1">
-						<div
-							v-for="i in 3"
-							:key="i"
-							class="bg-white shadow rounded-xl overflow-hidden hover:shadow-lg transition duration-300">
-							<img
-								src="https://asset.kompas.com/crops/RKyE9n689Ni8jPjt-iO_1jFuV0w=/203x225:749x589/1200x800/data/photo/2022/12/09/6392a51cdec7d.jpg"
-								alt="Nasi Gudeg Jogja"
-								class="h-48 w-full object-cover" />
-
-							<div class="p-4">
-								<!-- Title -->
-								<h3
-									class="text-base font-semibold text-gray-800 mb-1">
-									Nasi Gudeg Jogja
-								</h3>
-
-								<!-- Description -->
-								<p class="text-sm text-gray-600 line-clamp-2">
-									Gudeg Jogja gurih lengkap dengan Lorem ipsum
-									dolor sit amet, consectetur adipisicing
-									elit.
-								</p>
-
-								<!-- Price and Tag -->
-								<div
-									class="flex justify-between items-center mt-3">
-									<span class="text-blue-600 font-bold"
-										>Rp28.000</span
-									>
-									<span
-										class="text-sm text-yellow-500 font-medium bg-yellow-50 px-2 py-1 rounded-full"
-										>⭐ Andalan</span
-									>
-								</div>
-
-								<!-- Button -->
-								<button
-									class="mt-4 w-full py-2 bg-blue-100 text-blue-600 font-semibold rounded-lg border border-blue-300 hover:bg-blue-200 transition cursor-pointer">
-									Tambahkan
-								</button>
-							</div>
-						</div>
-					</div>
-				</div>
+				<HomeContent />
 			</div>
 
 			<!-- Detail Pesanan -->
 			<div class="w-full">
-				<div class="shadow-lg rounded-xl py-4 px-5 bg-white space-y-4">
+				<div class="shadow-lg rounded-2xl py-5 px-6 bg-white space-y-5">
 					<!-- Header -->
-					<div class="">
-						<h1 class="text-lg font-semibold text-gray-800">
+					<div>
+						<h1 class="text-lg font-bold text-gray-800">
 							Detail Pesanan
 						</h1>
-					</div>
-					<hr class="border-gray-200" />
-
-					<!-- Info -->
-					<div class="text-sm text-gray-600">
-						<span class="block font-bold text-gray-700 text-sm"
-							>#111 - Customer 46</span
-						>
-						<span class="text-xs text-gray-400">Pesanan aktif</span>
+						<hr class="mt-2 border-gray-200" />
 					</div>
 
-					<!-- Payment Methods -->
+					<!-- Info Pesanan -->
+					<div class="text-sm text-gray-600 space-y-1">
+						<p class="font-semibold text-gray-700">
+							#111 - Customer 46
+						</p>
+						<p
+							class="text-xs text-green-600 bg-green-100 px-2 py-0.5 rounded-full w-max">
+							Pesanan aktif
+						</p>
+					</div>
+
+					<!-- Metode Pembayaran -->
 					<div>
-						<span
-							class="block text-sm font-medium text-gray-700 mb-2">
-							Metode Pembayaran
-						</span>
-
-						<div class="flex flex-row gap-2">
+						<label
+							class="block text-sm font-medium text-gray-700 mb-2"
+							>Metode Pembayaran</label
+						>
+						<div class="flex flex-wrap gap-3">
 							<label
 								v-for="(option, i) in paymentOptions"
 								:key="i"
-								class="inline-flex items-center gap-2">
+								class="flex items-center gap-2 text-sm text-gray-700">
 								<input
 									type="radio"
-									:name="option"
+									name="payment"
 									:value="option"
 									class="text-blue-600 focus:ring-blue-500" />
-								<small class="font-medium">{{ option }}</small>
+								<span>{{ option }}</span>
 							</label>
 						</div>
 					</div>
 
-					<!-- Voucher Digital -->
-					<div class="space-y-2">
-						<div>
-							<small class="text-gray-700 font-semibold text-sm"
-								>Voucher Diskon</small
-							>
-						</div>
-						<div class="grid grid-cols-3 gap-3 items-center">
-							<div class="col-span-2">
-								<input
-									type="text"
-									placeholder="Masukkan kode voucher"
-									class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
-							</div>
-							<div>
-								<button
-									class="w-full bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium py-2 px-4 rounded-md transition">
-									Pakai
-								</button>
-							</div>
+					<!-- Voucher Diskon -->
+					<div>
+						<label
+							class="text-sm font-medium text-gray-700 block mb-2"
+							>Voucher Diskon</label
+						>
+						<div class="flex gap-3">
+							<input
+								type="text"
+								placeholder="Masukkan kode voucher"
+								class="flex-1 px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+							<button
+								class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-semibold transition">
+								Pakai
+							</button>
 						</div>
 					</div>
-					<hr class="border-gray-200 mt-5" />
-					<div>
-						<div class="grid grid-cols-3 gap-2">
-							<div>
-								<img src="https://asset.kompas.com/crops/RKyE9n689Ni8jPjt-iO_1jFuV0w=/203x225:749x589/1200x800/data/photo/2022/12/09/6392a51cdec7d.jpg" class="rounded-xl" alt="" srcset="">
+
+					<hr class="border-gray-200" />
+
+					<!-- Item Pesanan -->
+					<div class="flex gap-4">
+						<img
+							src="https://asset.kompas.com/crops/RKyE9n689Ni8jPjt-iO_1jFuV0w=/203x225:749x589/1200x800/data/photo/2022/12/09/6392a51cdec7d.jpg"
+							alt="Nasi Gudeg"
+							class="w-24 h-24 object-cover rounded-xl shadow-sm" />
+
+						<div class="flex-1 space-y-2">
+							<div class="flex justify-between items-start">
+								<div>
+									<h2
+										class="font-semibold text-sm text-gray-800">
+										Nasi Gudeg Jogja
+									</h2>
+									<Badge />
+									<!-- Assuming Badge is a registered component -->
+								</div>
+								<span class="text-blue-600 font-bold"
+									>Rp28.000</span
+								>
 							</div>
 
-							<div class="col-span-2">
-								<div class="flex justify-between">
-									<div>
-										<span class="font-semibold text-sm">Nasi Gudeg Jogja</span>
-										<br>
-										<span
-										class="text-sm text-yellow-500 font-medium bg-yellow-50 px-2 py-1 rounded-full"
-										>⭐ Andalan</span
-									>
-									</div>
-
-									<div>
-										<span class="text-blue-600 font-bold"
-										>Rp28.000</span
-									>
-									</div>
+							<!-- Quantity & Catatan -->
+							<div
+								class="flex flex-col md:flex-row mt-4 justify-between items-start md:items-center gap-3">
+								<!-- Quantity Control -->
+								<div class="flex items-center gap-2">
+									<button
+										class="w-8 h-8 flex items-center justify-center border border-blue-600 text-blue-600 rounded-full hover:bg-blue-100 transition">
+										<MinusIcon class="w-4 h-4" />
+									</button>
+									<input
+										readonly
+										type="number"
+										value="1"
+										min="1"
+										class="w-14 px-3 py-1.5 text-sm flex justify-center text-center border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+									<button
+										class="w-8 h-8 flex items-center justify-center border border-blue-600 text-blue-600 rounded-full hover:bg-blue-100 transition">
+										<PlusIcon class="w-4 h-4" />
+									</button>
 								</div>
+
+								<!-- Catatan -->
+								<button
+									class="text-sm text-blue-700 underline hover:text-blue-900 transition">
+									Tambahkan Catatan
+								</button>
 							</div>
 						</div>
 					</div>
@@ -166,9 +133,15 @@
 </template>
 
 <script lang="ts" setup>
-const menus = ref<string[]>(['Hidangan Utama', 'Hidangan Pembuka', 'Minuman']);
-
+import { PlusIcon, MinusIcon } from '@heroicons/vue/24/solid';
+const menus = ref<string[]>([
+	'Hidangan Utama',
+	'Hidangan Pembuka',
+	'Minuman',
+	'Pencuci Mulut',
+	'Paket Promo',
+	'Menu Musiman',
+]);
 const currentMenu = ref<string>('Hidangan Utama');
-
 const paymentOptions = ref<string[]>(['Qris', 'Cash', 'Debit']);
 </script>
