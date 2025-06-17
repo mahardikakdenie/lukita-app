@@ -3,7 +3,7 @@
 		<!-- Context -->
 		<div class="grid sm:grid-cols-3 gap-2 grid-cols-1">
 			<div
-				v-for="i in 3"
+				v-for="i in 6"
 				:key="i"
 				class="bg-white shadow rounded-xl overflow-hidden hover:shadow-lg transition duration-300">
 				<img
