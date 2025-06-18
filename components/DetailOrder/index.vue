@@ -61,7 +61,7 @@
                                 <Badge />
                                 <!-- Assuming Badge is a registered component -->
                             </div>
-                            <span class="text-blue-600 font-bold">{{ order.price }}</span>
+                            <span class="text-blue-600 font-bold text-sm">{{ formatToRupiah(order.price) }}</span>
                         </div>
 
                         <!-- Quantity & Catatan -->
@@ -113,7 +113,7 @@
 						</span>
 					</div>
 					<div>
-						<span class="text-sm"> Rp74.000 </span>
+						<span class="text-sm"> {{ subtotal }} </span>
 					</div>
 				</div>
 				<div class="flex justify-between mt-2">
@@ -185,8 +185,19 @@ const props = defineProps<{
     orders: Menu[],
 }>();
 
-const emits = defineEmits(['remove-cart'])
+const emits = defineEmits(['remove-cart']);
 
+const subtotal = computed(() => {
+  if (!props.orders || !Array.isArray(props.orders)) return 0
+
+  const total = props.orders.reduce((sum, order) => {
+    const price = parseInt(order?.price) || 0
+    const quantity = order?.quantity || 0
+    return sum + (price * quantity)
+  }, 0)
+
+  return formatToRupiah(total.toString());
+})
 const paymentOptions = ref<string[]>(['Tunai', 'Qris']);
 const selectOption = ref<string>('Tunai');
 const increaseQuantity = (order: Menu) => {
