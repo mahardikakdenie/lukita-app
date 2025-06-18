@@ -26,7 +26,7 @@
       </p>
       <button
         class="mt-4 px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-sm transition cursor-pointer"
-        @click="$router.push('/dashboard')"
+        @click="$router.push('/')"
       >
         Cek Status Pembayaran
       </button>
