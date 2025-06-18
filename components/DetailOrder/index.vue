@@ -48,7 +48,7 @@
 			<hr class="border-gray-200" />
 
 			<!-- Item Pesanan -->
-			<div v-if="orders.length > 0" class="flex flex-col gap-2">
+			<div v-if="orders.length > 0" class="flex flex-col gap-4">
                 <div v-for="(order, i) in orders" :key="i" class="flex gap-4">
                     <ImageLoader :image="order.image" customClass="h-24 w-24 rounded-2xl" />
 
