@@ -113,10 +113,10 @@
 						</span>
 					</div>
 					<div>
-						<span class="text-sm"> {{ subtotal }} </span>
+						<span class="text-sm"> {{ formatToRupiah(subtotal) }} </span>
 					</div>
 				</div>
-				<div class="flex justify-between mt-2">
+				<div v-if="false" class="flex justify-between mt-2">
 					<div>
 						<span class="font-bold class text-sm text-gray-500">
 							Diskon
@@ -133,7 +133,7 @@
 						</span>
 					</div>
 					<div>
-						<span class="text-sm"> Rp7.000 </span>
+						<span class="text-sm"> {{ formatToRupiah(taxCalculation.toString()) }} </span>
 					</div>
 				</div>
 				<div class="flex justify-between mt-2">
@@ -143,7 +143,7 @@
 						</span>
 					</div>
 					<div>
-						<span class="text-sm"> Rp71.400 </span>
+						<span class="text-sm"> {{ formatToRupiah(totalPrice.toString()) }} </span>
 					</div>
 				</div>
 			</div>
@@ -187,17 +187,45 @@ const props = defineProps<{
 
 const emits = defineEmits(['remove-cart']);
 
-const subtotal = computed(() => {
-  if (!props.orders || !Array.isArray(props.orders)) return 0
+const subtotal = computed((): string => {
+  if (!props.orders || !Array.isArray(props.orders)) return '0';
 
   const total = props.orders.reduce((sum, order) => {
     const price = parseInt(order?.price) || 0
     const quantity = order?.quantity || 0
     return sum + (price * quantity)
-  }, 0)
+  }, 0);
 
-  return formatToRupiah(total.toString());
-})
+  return total.toString();
+});
+
+const taxCalculation = computed(() => {
+    if (!props.orders || !Array.isArray(props.orders)) return 0;
+
+    const total = props.orders.reduce((sum, order) => {
+        const price = parseInt(order?.price) || 0;
+        const quantity = order?.quantity || 0;
+        return sum + (price * quantity);
+  }, 0);
+
+    return total * (11/100);
+});
+
+const totalPrice = computed(() => {
+    if (!props.orders || !Array.isArray(props.orders)) return 0;
+
+    const total = props.orders.reduce((sum, order) => {
+        const price = parseInt(order?.price) || 0;
+        const quantity = order?.quantity || 0;
+        return sum + (price * quantity);
+  }, 0);
+
+  console.log('taxCalculation.value : ', taxCalculation.value);
+  
+
+  return total - taxCalculation.value;
+});
+
 const paymentOptions = ref<string[]>(['Tunai', 'Qris']);
 const selectOption = ref<string>('Tunai');
 const increaseQuantity = (order: Menu) => {
