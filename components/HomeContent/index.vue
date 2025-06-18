@@ -48,7 +48,7 @@ export interface Menu {
 	price: string;
 	category: string;
 	type: string;
-    quantity?: any;
+    quantity?: number;
 }
 const menus = ref<Menu[]>([
 	{
