@@ -105,7 +105,8 @@
 			</div>
 
 			<div v-else class="p-3 flex justify-center">
-				<Badge text="Tidak ada pesanan" status="danger" />
+				<!-- <Badge text="Tidak ada pesanan" status="danger" /> -->
+                 <ImageLoader image="https://cdn-icons-png.flaticon.com/512/11329/11329060.png" />
 			</div>
 
 			<hr class="border-gray-200 my-2" />
