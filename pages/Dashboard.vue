@@ -28,5 +28,4 @@ const menus = ref<string[]>([
 	'Menu Musiman',
 ]);
 const currentMenu = ref<string>('Hidangan Utama');
-const paymentOptions = ref<string[]>(['Qris', 'Cash', 'Debit']);
 </script>
