@@ -21,7 +21,7 @@
 
 					<!-- Price and Tag -->
 					<div class="flex justify-between items-center mt-3">
-						<span class="text-blue-600 font-bold">{{ formatToRupiah(menu.price) }}</span>
+						<span class="text-blue-600 font-bold">Rp{{ formatToRupiah(menu.price) }}</span>
 						<Badge :text="menu.type" />
 					</div>
 

@@ -18,7 +18,7 @@
 						:key="i"
 						class="flex items-center gap-2 text-sm text-gray-700">
 						<input
-                            v-model="selectOption"
+							v-model="selectOption"
 							type="radio"
 							name="payment"
 							:value="option"
@@ -35,12 +35,15 @@
 				>
 				<div class="flex gap-3">
 					<input
+                        v-model="voucherInput"
 						type="text"
 						placeholder="Masukkan kode voucher"
 						class="flex-1 px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
 					<button
+                        @click="fetchDiscount"
 						class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-semibold transition">
-						Pakai
+                        <div v-if="isVoucherLoading" class="loader"></div>
+						<span v-else>Pakai</span>
 					</button>
 				</div>
 			</div>
@@ -49,59 +52,61 @@
 
 			<!-- Item Pesanan -->
 			<div v-if="orders.length > 0" class="flex flex-col gap-4">
-                <div v-for="(order, i) in orders" :key="i" class="flex gap-4">
-                    <ImageLoader :image="order.image" customClass="h-24 w-24 rounded-2xl" />
+				<div v-for="(order, i) in orders" :key="i" class="flex gap-4">
+					<ImageLoader
+						:image="order.image"
+						customClass="h-24 w-24 rounded-2xl" />
 
-                    <div class="flex-1 space-y-2">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <h2 class="font-semibold text-sm text-gray-800">
-                                    {{ order.name }}
-                                </h2>
-                                <Badge />
-                                <!-- Assuming Badge is a registered component -->
-                            </div>
-                            <span class="text-blue-600 font-bold text-sm">{{ formatToRupiah(order.price) }}</span>
-                        </div>
+					<div class="flex-1 space-y-2">
+						<div class="flex justify-between items-start">
+							<div>
+								<h2 class="font-semibold text-sm text-gray-800">
+									{{ order.name }}
+								</h2>
+								<Badge />
+								<!-- Assuming Badge is a registered component -->
+							</div>
+							<span class="text-blue-600 font-bold text-sm">{{
+								formatToRupiah(order.price)
+							}}</span>
+						</div>
 
-                        <!-- Quantity & Catatan -->
-                        <div
-                            class="flex flex-col md:flex-row mt-4 justify-between items-start md:items-center gap-3">
-                            <!-- Quantity Control -->
-                            <div class="flex items-center gap-2">
-                                <button
-                                    class="w-8 h-8 flex items-center cursor-pointer justify-center border border-blue-600 text-blue-600 rounded-xl bg-blue-200 hover:bg-blue-100 transition"
-                                    @click="reduceQuantity(order)"
-                                >
-                                    <MinusIcon class="w-4 h-4" />
-                                </button>
-                                <input
-                                    :value="order.quantity"
-                                    readonly
-                                    type="number"
-                                    min="0"
-                                    class="w-14 px-3 py-1.5 text-sm flex justify-center text-center border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                                <button
-                                    class="w-8 h-8 flex items-center cursor-pointer justify-center border border-blue-600 text-blue-600 rounded-xl bg-blue-200 hover:bg-blue-100 transition"
-                                    @click="increaseQuantity(order)"
-                                >
-                                    <PlusIcon class="w-4 h-4" />
-                                </button>
-                            </div>
+						<!-- Quantity & Catatan -->
+						<div
+							class="flex flex-col md:flex-row mt-4 justify-between items-start md:items-center gap-3">
+							<!-- Quantity Control -->
+							<div class="flex items-center gap-2">
+								<button
+									class="w-8 h-8 flex items-center cursor-pointer justify-center border border-blue-600 text-blue-600 rounded-xl bg-blue-200 hover:bg-blue-100 transition"
+									@click="reduceQuantity(order)">
+									<MinusIcon class="w-4 h-4" />
+								</button>
+								<input
+									:value="order.quantity"
+									readonly
+									type="number"
+									min="0"
+									class="w-14 px-3 py-1.5 text-sm flex justify-center text-center border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+								<button
+									class="w-8 h-8 flex items-center cursor-pointer justify-center border border-blue-600 text-blue-600 rounded-xl bg-blue-200 hover:bg-blue-100 transition"
+									@click="increaseQuantity(order)">
+									<PlusIcon class="w-4 h-4" />
+								</button>
+							</div>
 
-                            <!-- Catatan -->
-                            <button
-                                class="text-sm text-blue-700 underline hover:text-blue-900 transition">
-                                Tambahkan Catatan
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+							<!-- Catatan -->
+							<button
+								class="text-sm text-blue-700 underline hover:text-blue-900 transition">
+								Tambahkan Catatan
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
 
-            <div v-else class="p-3 flex justify-center">
-                <Badge text="Tidak ada pesanan" status="danger" />
-            </div>
+			<div v-else class="p-3 flex justify-center">
+				<Badge text="Tidak ada pesanan" status="danger" />
+			</div>
 
 			<hr class="border-gray-200 my-2" />
 
@@ -113,7 +118,9 @@
 						</span>
 					</div>
 					<div>
-						<span class="text-sm"> {{ formatToRupiah(subtotal) }} </span>
+						<span class="text-sm">
+							{{ formatToRupiah(subtotal.toString()) }}
+						</span>
 					</div>
 				</div>
 				<div v-if="false" class="flex justify-between mt-2">
@@ -133,7 +140,9 @@
 						</span>
 					</div>
 					<div>
-						<span class="text-sm"> {{ formatToRupiah(taxCalculation.toString()) }} </span>
+						<span class="text-sm">
+							{{ formatToRupiah(taxCalculation.toString()) }}
+						</span>
 					</div>
 				</div>
 				<div class="flex justify-between mt-2">
@@ -143,7 +152,9 @@
 						</span>
 					</div>
 					<div>
-						<span class="text-sm"> {{ formatToRupiah(totalPrice.toString()) }} </span>
+						<span class="text-sm">
+							{{ formatToRupiah(totalPrice.toString()) }}
+						</span>
 					</div>
 				</div>
 			</div>
@@ -175,71 +186,71 @@
 </template>
 
 <script lang="ts" setup>
+
+interface Voucher {
+    id: string;
+    code: string,
+    discount: string,
+    type: string;
+}
+
 import { NuxtLink } from '#components';
 import { PlusIcon, MinusIcon } from '@heroicons/vue/24/solid';
 import type { Menu } from '../HomeContent/index.vue';
 import ImageLoader from '../imageLoader.vue';
-import { useCarts } from '~/composables/useCarts'
 
 const props = defineProps<{
-    orders: Menu[],
+	orders: Menu[];
 }>();
-
 const emits = defineEmits(['remove-cart']);
 
-const subtotal = computed((): string => {
-  if (!props.orders || !Array.isArray(props.orders)) return '0';
+const { 
+    subtotal,
+    taxCalculation,
+    totalPrice 
+} = useCartSummary(props.orders);
 
-  const total = props.orders.reduce((sum, order) => {
-    const price = parseInt(order?.price) || 0
-    const quantity = order?.quantity || 0
-    return sum + (price * quantity)
-  }, 0);
+const isVoucherLoading = ref<boolean>(false);
+const voucherInput = ref<string>('');
+const voucherActive = ref<Voucher | null>(null);
 
-  return total.toString();
-});
 
-const taxCalculation = computed(() => {
-    if (!props.orders || !Array.isArray(props.orders)) return 0;
+    
+const fetchDiscount = async () => {
+    isVoucherLoading.value = true;
+  try {
+    const vouchers = await $fetch<Voucher[]>('/api/voucher', {
+      method: 'GET'
+    });
 
-    const total = props.orders.reduce((sum, order) => {
-        const price = parseInt(order?.price) || 0;
-        const quantity = order?.quantity || 0;
-        return sum + (price * quantity);
-  }, 0);
+    const voucher = vouchers?.find((v: Voucher) => v?.code == voucherInput?.value);
 
-    return total * (11/100);
-});
-
-const totalPrice = computed(() => {
-    if (!props.orders || !Array.isArray(props.orders)) return 0;
-
-    const total = props.orders.reduce((sum, order) => {
-        const price = parseInt(order?.price) || 0;
-        const quantity = order?.quantity || 0;
-        return sum + (price * quantity);
-  }, 0);
-
-  console.log('taxCalculation.value : ', taxCalculation.value);
-  
-
-  return total - taxCalculation.value;
-});
+    if (voucher) {
+        voucherActive.value = voucher;
+        alert(`Voucher Active dengan diskon : ${voucher?.discount}`)
+    }
+    isVoucherLoading.value = false;
+    
+    } catch (err) {
+        isVoucherLoading.value = false;
+        console.error("Error fetching voucher:", err)
+  }
+}
 
 const paymentOptions = ref<string[]>(['Tunai', 'Qris']);
 const selectOption = ref<string>('Tunai');
 const increaseQuantity = (order: Menu) => {
-    if (order.quantity) {
-        order.quantity++;
-    }
-}
+	if (order.quantity) {
+		order.quantity++;
+	}
+};
 const reduceQuantity = (order: Menu) => {
-    if (order.quantity) {
-        order.quantity--;
+	if (order.quantity) {
+		order.quantity--;
 
-        if (order?.quantity === 0) {
-            emits('remove-cart', order);
-        }
-    }
-}
+		if (order?.quantity === 0) {
+			emits('remove-cart', order);
+		}
+	}
+};
 </script>
