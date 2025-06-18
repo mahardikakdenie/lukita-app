@@ -1,5 +1,5 @@
 <template>
-	<div class="relative w-full h-48">
+	<div class="relative">
 		<!-- Loader -->
 		<div
 			v-if="isLoading"
@@ -12,17 +12,20 @@
 			v-if="image"
 			:src="image"
 			alt="image-alt"
-			class="h-48 w-full object-cover transition-opacity duration-300"
-			:class="{ 'opacity-0': isLoading }"
+			class="`object-cover transition-opacity duration-300 rounded-2xl`"
+			:class="[{ 'opacity-0': isLoading }, customClass]"
 			@load="isLoading = false"
 			@error="isLoading = false" />
 	</div>
 </template>
 
 <script lang="ts" setup>
-const props = defineProps<{
+const props = withDefaults(defineProps<{
 	image: string;
-}>();
+	customClass?: string;
+}>(), {
+	customClass: 'h-48 w-full',
+});
 
 const isLoading = ref<boolean>(false);
 </script>

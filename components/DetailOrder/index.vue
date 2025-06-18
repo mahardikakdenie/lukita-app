@@ -48,64 +48,67 @@
 			<hr class="border-gray-200" />
 
 			<!-- Item Pesanan -->
-			<div v-for="i in 2" :key="i" class="flex gap-4">
-				<img
-					src="https://asset.kompas.com/crops/RKyE9n689Ni8jPjt-iO_1jFuV0w=/203x225:749x589/1200x800/data/photo/2022/12/09/6392a51cdec7d.jpg"
-					alt="Nasi Gudeg"
-					class="w-24 h-24 object-cover rounded-xl shadow-sm" />
+			<div v-if="orders.length > 0">
+                <div v-for="(order, i) in orders" :key="i" class="flex gap-4">
+                    <ImageLoader :image="order.image" customClass="h-24 w-24 rounded-2xl" />
 
-				<div class="flex-1 space-y-2">
-					<div class="flex justify-between items-start">
-						<div>
-							<h2 class="font-semibold text-sm text-gray-800">
-								Nasi Gudeg Jogja
-							</h2>
-							<Badge />
-							<!-- Assuming Badge is a registered component -->
-						</div>
-						<span class="text-blue-600 font-bold">Rp28.000</span>
-					</div>
+                    <div class="flex-1 space-y-2">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h2 class="font-semibold text-sm text-gray-800">
+                                    {{ order.name }}
+                                </h2>
+                                <Badge />
+                                <!-- Assuming Badge is a registered component -->
+                            </div>
+                            <span class="text-blue-600 font-bold">{{ order.price }}</span>
+                        </div>
 
-					<!-- Quantity & Catatan -->
-					<div
-						class="flex flex-col md:flex-row mt-4 justify-between items-start md:items-center gap-3">
-						<!-- Quantity Control -->
-						<div class="flex items-center gap-2">
-							<button
-								class="w-8 h-8 flex items-center justify-center border border-blue-600 text-blue-600 rounded-xl bg-blue-200 hover:bg-blue-100 transition">
-								<MinusIcon class="w-4 h-4" />
-							</button>
-							<input
-								readonly
-								type="number"
-								value="1"
-								min="1"
-								class="w-14 px-3 py-1.5 text-sm flex justify-center text-center border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
-							<button
-								class="w-8 h-8 flex items-center justify-center border border-blue-600 text-blue-600 rounded-xl bg-blue-200 hover:bg-blue-100 transition">
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									fill="none"
-									viewBox="0 0 24 24"
-									stroke-width="1.5"
-									stroke="currentColor"
-									class="size-6">
-									<path
-										stroke-linecap="round"
-										stroke-linejoin="round"
-										d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-								</svg>
-							</button>
-						</div>
+                        <!-- Quantity & Catatan -->
+                        <div
+                            class="flex flex-col md:flex-row mt-4 justify-between items-start md:items-center gap-3">
+                            <!-- Quantity Control -->
+                            <div class="flex items-center gap-2">
+                                <button
+                                    class="w-8 h-8 flex items-center justify-center border border-blue-600 text-blue-600 rounded-xl bg-blue-200 hover:bg-blue-100 transition">
+                                    <MinusIcon class="w-4 h-4" />
+                                </button>
+                                <input
+                                    :value="order.quantity"
+                                    readonly
+                                    type="number"
+                                    min="0"
+                                    class="w-14 px-3 py-1.5 text-sm flex justify-center text-center border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                <button
+                                    class="w-8 h-8 flex items-center justify-center border border-blue-600 text-blue-600 rounded-xl bg-blue-200 hover:bg-blue-100 transition">
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke-width="1.5"
+                                        stroke="currentColor"
+                                        class="size-6">
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                    </svg>
+                                </button>
+                            </div>
 
-						<!-- Catatan -->
-						<button
-							class="text-sm text-blue-700 underline hover:text-blue-900 transition">
-							Tambahkan Catatan
-						</button>
-					</div>
-				</div>
-			</div>
+                            <!-- Catatan -->
+                            <button
+                                class="text-sm text-blue-700 underline hover:text-blue-900 transition">
+                                Tambahkan Catatan
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div v-else class="p-3 flex justify-center">
+                <Badge text="Tidak ada pesanan" status="danger" />
+            </div>
 
 			<hr class="border-gray-200 my-2" />
 
@@ -181,6 +184,13 @@
 <script lang="ts" setup>
 import { NuxtLink } from '#components';
 import { PlusIcon, MinusIcon } from '@heroicons/vue/24/solid';
+import type { Menu } from '../HomeContent/index.vue';
+import ImageLoader from '../imageLoader.vue';
+
+const props = defineProps<{
+    orders: Menu[],
+}>()
+
 const paymentOptions = ref<string[]>(['Tunai', 'Qris']);
-const selectOption = ref<string>('');
+const selectOption = ref<string>('Tunai');
 </script>

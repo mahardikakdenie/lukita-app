@@ -13,12 +13,14 @@
 			</div>
 
 			<!-- Detail Pesanan -->
-			<DetailOrder />
+			<DetailOrder :orders="selectedMenus" />
 		</div>
 	</div>
 </template>
 
 <script lang="ts" setup>
+import type { Menu } from '../components/HomeContent/index.vue';
+
 const menus = ref<string[]>([
 	'Hidangan Utama',
 	'Hidangan Pembuka',
@@ -28,4 +30,16 @@ const menus = ref<string[]>([
 	'Menu Musiman',
 ]);
 const currentMenu = ref<string>('Hidangan Utama');
+const selectedMenus = ref<Menu[]>([
+    {
+		image: 'https://asset.kompas.com/crops/RKyE9n689Ni8jPjt-iO_1jFuV0w=/203x225:749x589/1200x800/data/photo/2022/12/09/6392a51cdec7d.jpg',
+		name: 'Nasi Gudeg Jogja',
+		description:
+			'Gudeg Jogja gurih lengkap dengan Lorem ipsum dolor sitamet, consectetur adipisicing elit.',
+		price: '28.000',
+		category: 'hidangan-utama',
+		type: '⭐ Andalan',
+		quantity: 1,
+	},
+]);
 </script>
