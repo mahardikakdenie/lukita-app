@@ -70,7 +70,9 @@
                             <!-- Quantity Control -->
                             <div class="flex items-center gap-2">
                                 <button
-                                    class="w-8 h-8 flex items-center justify-center border border-blue-600 text-blue-600 rounded-xl bg-blue-200 hover:bg-blue-100 transition">
+                                    class="w-8 h-8 flex items-center justify-center border border-blue-600 text-blue-600 rounded-xl bg-blue-200 hover:bg-blue-100 transition"
+                                    @click="reduceQuantity(order)"
+                                >
                                     <MinusIcon class="w-4 h-4" />
                                 </button>
                                 <input
@@ -80,7 +82,9 @@
                                     min="0"
                                     class="w-14 px-3 py-1.5 text-sm flex justify-center text-center border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                 <button
-                                    class="w-8 h-8 flex items-center justify-center border border-blue-600 text-blue-600 rounded-xl bg-blue-200 hover:bg-blue-100 transition">
+                                    class="w-8 h-8 flex items-center justify-center border border-blue-600 text-blue-600 rounded-xl bg-blue-200 hover:bg-blue-100 transition"
+                                    @click="increaseQuantity(order)"
+                                >
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
                                         fill="none"
@@ -193,4 +197,14 @@ const props = defineProps<{
 
 const paymentOptions = ref<string[]>(['Tunai', 'Qris']);
 const selectOption = ref<string>('Tunai');
+const increaseQuantity = (order: Menu) => {
+    if (order.quantity) {
+        order.quantity++;
+    }
+}
+const reduceQuantity = (order: Menu) => {
+    if (order.quantity) {
+        order.quantity--;
+    }
+}
 </script>

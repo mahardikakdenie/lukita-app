@@ -1,9 +1,9 @@
 <template>
 	<div class="mt-4">
 		<!-- Context -->
-		<div class="grid sm:grid-cols-3 gap-2 grid-cols-1">
+		<div v-if="!pending" class="grid sm:grid-cols-3 gap-2 grid-cols-1">
 			<div
-				v-for="(menu, i) in menus"
+				v-for="(menu, i) in data"
 				:key="i"
 				class="bg-white shadow rounded-xl overflow-hidden hover:shadow-lg transition duration-300"
             >
@@ -38,6 +38,10 @@
 				</div>
 			</div>
 		</div>
+
+        <div v-else>
+            <div class="loader"></div>
+        </div>
 	</div>
 </template>
 <script setup lang="ts">
@@ -50,69 +54,28 @@ export interface Menu {
 	type: string;
     quantity?: number;
 }
-const menus = ref<Menu[]>([
-	{
-		image: 'https://asset.kompas.com/crops/RKyE9n689Ni8jPjt-iO_1jFuV0w=/203x225:749x589/1200x800/data/photo/2022/12/09/6392a51cdec7d.jpg',
-		name: 'Nasi Gudeg Jogja',
-		description:
-			'Gudeg Jogja gurih lengkap dengan Lorem ipsum dolor sitamet, consectetur adipisicing elit.',
-		price: '28.000',
-		category: 'hidangan-utama',
-		type: '⭐ Andalan',
-        quantity: 0,
-	},
-	{
-        image: 'https://sanex.co.id/wp-content/uploads/2024/11/2734.jpg',
-		name: 'Nasi Gudeg Goreng',
-		description:
-        'Gudeg Goreng gurih lengkap dengan Lorem ipsum dolor sitamet, consectetur adipisicing elit.',
-		price: '28.000',
-		category: 'hidangan-utama',
-		type: '⭐ Andalan',
-        quantity: 0,
-	},
-	{
-        image: 'https://cdn1-production-images-kly.akamaized.net/qre6SO9lOT9aiWSDufQLxZaOj_I=/640x360/smart/filters:quality(75):strip_icc():format(webp)/kly-media-production/medias/3117261/original/048100200_1588325749-030607000_1467613172-rawon-setan.jpg',
-		name: 'Rawon Daging Surabaya',
-		description:
-        'Rawon Daging Surabaya lengkap dengan Lorem ipsum dolor sitamet, consectetur adipisicing elit.',
-		price: '28.000',
-		category: 'hidangan-utama',
-		type: '⭐ Andalan',
-        quantity: 0,
-	},
-	{
-        image: 'https://buckets.sasa.co.id/v1/AUTH_Assets/Assets/p/website/medias/page_medias/resep_tongseng_solo.jpg',
-		name: 'Tongseng Kambing Solo',
-		description:
-        'Tongseng Kambing Solo lengkap dengan Lorem ipsum dolor sitamet, consectetur adipisicing elit.',
-		price: '28.000',
-		category: 'hidangan-utama',
-		type: '⭐ Andalan',
-        quantity: 0,
-	},
-	{
-        image: 'https://imgx.sonora.id/crop/0x0:0x0/x/photo/2023/03/29/64225543cbfdejpg-20230329033353.jpg',
-		name: 'Empal Gebuk Cirebon',
-		description:
-        'Empal Gebuk Cirebon lengkap dengan Lorem ipsum dolor sitamet, consectetur adipisicing elit.',
-		price: '28.000',
-		category: 'hidangan-utama',
-		type: '⭐ Andalan',
-        quantity: 0,
-	},
-	{
-        image: 'https://www.unileverfoodsolutions.co.id/dam/global-ufs/mcos/SEA/calcmenu/recipes/ID-recipes/chicken-&-other-poultry-dishes/pecel-madiun/main-header.jpg',
-		name: 'Pecel Sayur Madiun',
-		description:
-        'Pecel Sayur Madiun lengkap dengan Lorem ipsum dolor sitamet, consectetur adipisicing elit.',
-		price: '28.000',
-		category: 'hidangan-utama',
-		type: '⭐ Andalan',
-        quantity: 0,
-	},
-]);
+
+const { data, pending, error } = await useFetch<Menu[]>('/api/product', {
+  server: true
+})
 
 
 const isLoading = ref<boolean>(false);
 </script>
+
+
+<style>
+.loader {
+  width: 24px;
+  height: 24px;
+  border: 4px solid #cbd5e0;
+  border-top-color: #3b82f6;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+</style>
