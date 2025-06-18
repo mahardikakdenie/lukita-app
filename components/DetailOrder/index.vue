@@ -27,6 +27,7 @@
 						:key="i"
 						class="flex items-center gap-2 text-sm text-gray-700">
 						<input
+                            v-model="selectOption"
 							type="radio"
 							name="payment"
 							:value="option"
@@ -80,7 +81,7 @@
 						<!-- Quantity Control -->
 						<div class="flex items-center gap-2">
 							<button
-								class="w-8 h-8 flex items-center justify-center border border-blue-600 text-blue-600 rounded-xl bg-blue-200  hover:bg-blue-100 transition">
+								class="w-8 h-8 flex items-center justify-center border border-blue-600 text-blue-600 rounded-xl bg-blue-200 hover:bg-blue-100 transition">
 								<MinusIcon class="w-4 h-4" />
 							</button>
 							<input
@@ -91,10 +92,18 @@
 								class="w-14 px-3 py-1.5 text-sm flex justify-center text-center border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
 							<button
 								class="w-8 h-8 flex items-center justify-center border border-blue-600 text-blue-600 rounded-xl bg-blue-200 hover:bg-blue-100 transition">
-								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                </svg>
-
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									fill="none"
+									viewBox="0 0 24 24"
+									stroke-width="1.5"
+									stroke="currentColor"
+									class="size-6">
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+								</svg>
 							</button>
 						</div>
 
@@ -107,70 +116,73 @@
 				</div>
 			</div>
 
-            <hr class="border-gray-200 my-2" />
+			<hr class="border-gray-200 my-2" />
 
-            <div>
-                <div class="flex justify-between">
-                    <div>
-                        <span class="font-bold class text-sm text-gray-500">
-                            Subtotal
-                        </span>
-                    </div>
-                    <div>
-                        <span class="text-sm">
-                            Rp74.000
-                        </span>
-                    </div>
-                </div>
-                <div class="flex justify-between mt-2">
-                    <div>
-                        <span class="font-bold class text-sm text-gray-500">
-                            Diskon
-                        </span>
-                    </div>
-                    <div>
-                        <span class="text-sm">
-                            - Rp10.000
-                        </span>
-                    </div>
-                </div>
-                <div class="flex justify-between mt-2">
-                    <div>
-                        <span class="font-bold class text-sm text-gray-500">
-                            Pajak (11%)
-                        </span>
-                    </div>
-                    <div>
-                        <span class="text-sm">
-                            Rp7.000
-                        </span>
-                    </div>
-                </div>
-                <div class="flex justify-between mt-2">
-                    <div>
-                        <span class="font-bold class text-sm text-gray-500">
-                            Total
-                        </span>
-                    </div>
-                    <div>
-                        <span class="text-sm">
-                            Rp71.400
-                        </span>
-                    </div>
-                </div>
-            </div>
+			<div>
+				<div class="flex justify-between">
+					<div>
+						<span class="font-bold class text-sm text-gray-500">
+							Subtotal
+						</span>
+					</div>
+					<div>
+						<span class="text-sm"> Rp74.000 </span>
+					</div>
+				</div>
+				<div class="flex justify-between mt-2">
+					<div>
+						<span class="font-bold class text-sm text-gray-500">
+							Diskon
+						</span>
+					</div>
+					<div>
+						<span class="text-sm"> - Rp10.000 </span>
+					</div>
+				</div>
+				<div class="flex justify-between mt-2">
+					<div>
+						<span class="font-bold class text-sm text-gray-500">
+							Pajak (11%)
+						</span>
+					</div>
+					<div>
+						<span class="text-sm"> Rp7.000 </span>
+					</div>
+				</div>
+				<div class="flex justify-between mt-2">
+					<div>
+						<span class="font-bold class text-sm text-gray-500">
+							Total
+						</span>
+					</div>
+					<div>
+						<span class="text-sm"> Rp71.400 </span>
+					</div>
+				</div>
+			</div>
 
-            <hr class="border-gray-200 my-2" />
+			<hr class="border-gray-200 my-2" />
 
-            <div class="w-full">
-                <NuxtLink to="/payment" class="bg-blue-200 rounded-xl w-full text-blue-700 font-bold py-2 flex justify-center gap-2 cursor-pointer">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 0 0-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 0 1-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 0 0 3 15h-.75M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm3 0h.008v.008H18V10.5Zm-12 0h.008v.008H6V10.5Z" />
-                    </svg>
+			<div class="w-full">
+				<NuxtLink
+					to="/payment"
+					class="bg-blue-200 rounded-xl w-full text-blue-700 font-bold py-2 flex justify-center gap-2 cursor-pointer hover:bg-blue-100">
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						fill="none"
+						viewBox="0 0 24 24"
+						stroke-width="1.5"
+						stroke="currentColor"
+						class="size-6">
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 0 0-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 0 1-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 0 0 3 15h-.75M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm3 0h.008v.008H18V10.5Zm-12 0h.008v.008H6V10.5Z" />
+					</svg>
 
-                    Selesaikan Pembayaran
-                </NuxtLink>
-            </div>
+					Selesaikan Pembayaran
+				</NuxtLink>
+			</div>
 		</div>
 	</div>
 </template>
@@ -178,5 +190,6 @@
 <script lang="ts" setup>
 import { NuxtLink } from '#components';
 import { PlusIcon, MinusIcon } from '@heroicons/vue/24/solid';
-const paymentOptions = ref<string[]>(['Qris', 'Cash', 'Debit']);
+const paymentOptions = ref<string[]>(['Tunai', 'Qris']);
+const selectOption = ref<string>('');
 </script>
