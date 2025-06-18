@@ -11,19 +11,18 @@
 				<div class="p-4">
 					<!-- Title -->
 					<h3 class="text-base font-semibold text-gray-800 mb-1">
-						Nasi Gudeg Jogja
+						{{ menu.name }}
 					</h3>
 
 					<!-- Description -->
 					<p class="text-sm text-gray-600 line-clamp-2">
-						Gudeg Jogja gurih lengkap dengan Lorem ipsum dolor sit
-						amet, consectetur adipisicing elit.
+						{{ menu.description }}
 					</p>
 
 					<!-- Price and Tag -->
 					<div class="flex justify-between items-center mt-3">
-						<span class="text-blue-600 font-bold">Rp28.000</span>
-						<Badge />
+						<span class="text-blue-600 font-bold">Rp{{ menu.price }}</span>
+						<Badge :text="menu.type" />
 					</div>
 
 					<!-- Button -->
@@ -57,10 +56,7 @@ export interface Menu {
 
 const { data, pending, error } = await useFetch<Menu[]>('/api/product', {
   server: true
-})
-
-
-const isLoading = ref<boolean>(false);
+});
 </script>
 
 

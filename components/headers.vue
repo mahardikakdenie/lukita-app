@@ -14,7 +14,7 @@
 						Panggil Pelayan
 					</button>
 					<button
-						class="border bg-blue-500 text-sm px-5 py-2 font-medium text-white rounded-xl hover:bg-blue-50 transition">
+						class="border bg-blue-500 text-sm px-5 py-2 font-medium text-white rounded-xl hover:bg-blue-600 transition">
 						Login
 					</button>
 				</nav>
