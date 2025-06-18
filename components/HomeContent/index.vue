@@ -64,14 +64,15 @@ const props = defineProps<{
 }>()
 
 const { data, pending, error } = await useFetch<Menu[]>('/api/product', {
-  server: true
+  server: true,
+  params: {
+    type: 'hidangan-utama'
+  }
 });
 
 const emits = defineEmits(['add-to-cart']);
 
 const addCart = (product: Menu) => {
-    console.log("Product : ", product);
-    
     emits('add-to-cart', product);
 };
 </script>

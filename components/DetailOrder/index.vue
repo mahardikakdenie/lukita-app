@@ -70,7 +70,7 @@
                             <!-- Quantity Control -->
                             <div class="flex items-center gap-2">
                                 <button
-                                    class="w-8 h-8 flex items-center justify-center border border-blue-600 text-blue-600 rounded-xl bg-blue-200 hover:bg-blue-100 transition"
+                                    class="w-8 h-8 flex items-center cursor-pointer justify-center border border-blue-600 text-blue-600 rounded-xl bg-blue-200 hover:bg-blue-100 transition"
                                     @click="reduceQuantity(order)"
                                 >
                                     <MinusIcon class="w-4 h-4" />
@@ -82,21 +82,10 @@
                                     min="0"
                                     class="w-14 px-3 py-1.5 text-sm flex justify-center text-center border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                 <button
-                                    class="w-8 h-8 flex items-center justify-center border border-blue-600 text-blue-600 rounded-xl bg-blue-200 hover:bg-blue-100 transition"
+                                    class="w-8 h-8 flex items-center cursor-pointer justify-center border border-blue-600 text-blue-600 rounded-xl bg-blue-200 hover:bg-blue-100 transition"
                                     @click="increaseQuantity(order)"
                                 >
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke-width="1.5"
-                                        stroke="currentColor"
-                                        class="size-6">
-                                        <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                    </svg>
+                                    <PlusIcon class="w-4 h-4" />
                                 </button>
                             </div>
 
@@ -194,7 +183,9 @@ import { useCarts } from '~/composables/useCarts'
 
 const props = defineProps<{
     orders: Menu[],
-}>()
+}>();
+
+const emits = defineEmits(['remove-cart'])
 
 const paymentOptions = ref<string[]>(['Tunai', 'Qris']);
 const selectOption = ref<string>('Tunai');
@@ -206,6 +197,10 @@ const increaseQuantity = (order: Menu) => {
 const reduceQuantity = (order: Menu) => {
     if (order.quantity) {
         order.quantity--;
+
+        if (order?.quantity === 0) {
+            emits('remove-cart', order);
+        }
     }
 }
 </script>

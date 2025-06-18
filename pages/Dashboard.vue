@@ -13,7 +13,7 @@
 			</div>
 
 			<!-- Detail Pesanan -->
-			<DetailOrder :orders="carts" />
+			<DetailOrder :orders="carts" @remove-cart="onRemoveCart" />
 		</div>
 	</div>
 </template>
@@ -33,20 +33,15 @@ const menus = ref<string[]>([
 	'Menu Musiman',
 ]);
 const currentMenu = ref<string>('Hidangan Utama');
-const selectedMenus = ref<Menu[]>([
-    {
-		image: 'https://asset.kompas.com/crops/RKyE9n689Ni8jPjt-iO_1jFuV0w=/203x225:749x589/1200x800/data/photo/2022/12/09/6392a51cdec7d.jpg',
-		name: 'Nasi Gudeg Jogja',
-		description:
-			'Gudeg Jogja gurih lengkap dengan Lorem ipsum dolor sitamet, consectetur adipisicing elit.',
-		price: '28.000',
-		category: 'hidangan-utama',
-		type: '⭐ Andalan',
-		quantity: 1,
-	},
-]);
 
 const addToCarts = (product: Menu) => {
 	addToCart(product);
+};
+
+const onRemoveCart = (cartProduct: Menu) => {
+	const indexCart = carts.value?.findIndex(cart => cart?.name === cartProduct?.name);
+	if (indexCart !== -1) {
+		carts.value?.splice(indexCart, 1);
+	}
 };
 </script>

@@ -7,7 +7,6 @@ export const useCarts = () => {
         
         const existingItem = carts?.value?.find(cart => cart?.name === product.name);
         
-        console.log("🚀 ~ addToCart ~ !existingItem:", !existingItem)
         if (!existingItem) {
             carts.value.push({ ...product, quantity: product?.quantity ? product?.quantity : 1 });
         }
