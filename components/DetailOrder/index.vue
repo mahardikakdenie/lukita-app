@@ -7,15 +7,6 @@
 				<hr class="mt-2 border-gray-200" />
 			</div>
 
-			<!-- Info Pesanan -->
-			<div class="text-sm text-gray-600 space-y-1">
-				<p class="font-semibold text-gray-700">#111 - Customer 46</p>
-				<p
-					class="text-xs text-green-600 bg-green-100 px-2 py-0.5 rounded-full w-max">
-					Pesanan aktif
-				</p>
-			</div>
-
 			<!-- Metode Pembayaran -->
 			<div>
 				<label class="block text-sm font-medium text-gray-700 mb-2"

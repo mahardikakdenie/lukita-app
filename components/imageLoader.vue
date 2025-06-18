@@ -11,7 +11,7 @@
 		<img
 			v-if="image"
 			:src="image"
-			alt="Nasi Gudeg Jogja"
+			alt="image-alt"
 			class="h-48 w-full object-cover transition-opacity duration-300"
 			:class="{ 'opacity-0': isLoading }"
 			@load="isLoading = false"
