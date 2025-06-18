@@ -48,7 +48,7 @@
 			<hr class="border-gray-200" />
 
 			<!-- Item Pesanan -->
-			<div v-if="orders.length > 0">
+			<div v-if="orders.length > 0" class="flex flex-col gap-2">
                 <div v-for="(order, i) in orders" :key="i" class="flex gap-4">
                     <ImageLoader :image="order.image" customClass="h-24 w-24 rounded-2xl" />
 
@@ -190,6 +190,7 @@ import { NuxtLink } from '#components';
 import { PlusIcon, MinusIcon } from '@heroicons/vue/24/solid';
 import type { Menu } from '../HomeContent/index.vue';
 import ImageLoader from '../imageLoader.vue';
+import { useCarts } from '~/composables/useCarts'
 
 const props = defineProps<{
     orders: Menu[],

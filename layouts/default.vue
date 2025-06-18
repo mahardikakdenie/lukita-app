@@ -28,7 +28,4 @@ useSeoMeta({
 	font-family: 'Poppins', sans-serif;
 }
 
-button {
-    @apply cursor-pointer;
-}
 </style>

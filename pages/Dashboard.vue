@@ -9,17 +9,20 @@
 					@on-set-menu="(menu) => (currentMenu = menu)" />
 				<hr class="border-gray-200" />
 
-				<HomeContent />
+				<HomeContent :carts="carts" @add-to-cart="addToCarts" />
 			</div>
 
 			<!-- Detail Pesanan -->
-			<DetailOrder :orders="selectedMenus" />
+			<DetailOrder :orders="carts" />
 		</div>
 	</div>
 </template>
 
 <script lang="ts" setup>
 import type { Menu } from '../components/HomeContent/index.vue';
+import { useCarts } from '~/composables/useCarts'
+
+const { carts, addToCart } = useCarts();
 
 const menus = ref<string[]>([
 	'Hidangan Utama',
@@ -42,4 +45,8 @@ const selectedMenus = ref<Menu[]>([
 		quantity: 1,
 	},
 ]);
+
+const addToCarts = (product: Menu) => {
+	addToCart(product);
+};
 </script>
