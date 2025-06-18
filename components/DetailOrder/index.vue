@@ -124,14 +124,14 @@
 						</span>
 					</div>
 				</div>
-				<div v-if="false" class="flex justify-between mt-2">
+				<div v-if="voucherActive" class="flex justify-between mt-2">
 					<div>
 						<span class="font-bold class text-sm text-gray-500">
-							Diskon
+							Diskon <Badge :text="voucherActive.discount" />
 						</span>
 					</div>
 					<div>
-						<span class="text-sm"> - Rp10.000 </span>
+						<Badge text="-Rp10.000" status="danger" />
 					</div>
 				</div>
 				<div class="flex justify-between mt-2">
