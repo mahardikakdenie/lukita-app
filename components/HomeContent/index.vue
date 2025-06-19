@@ -29,7 +29,7 @@
 						<button
 							@click="addCart(menu)"
 							:disabled="carts.some((c) => c.name === menu.name)"
-							class="text-xs px-3 py-1 rounded-full bg-white border border-blue-500 text-blue-600 disabled:bg-blue-100 disabled:text-blue-400">
+							class="text-xs px-3 py-1 rounded-full cursor-pointer bg-white border border-blue-500 text-blue-600 disabled:bg-blue-100 disabled:text-blue-400">
 							{{
 								carts.some((c) => c.name === menu.name)
 									? '✔ Ditambahkan'
