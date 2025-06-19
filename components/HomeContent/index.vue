@@ -98,15 +98,6 @@ const { data, pending, error } = await useFetch<Menu[]>('/api/product', {
 	},
 });
 
-const fetchProducts = async () => {
-    const { data, pending, error } = await useFetch<Menu[]>('/api/product', {
-        server: true,
-        params: {
-            type: 'hidangan-utama',
-        },
-    });
-};
-
 const emits = defineEmits(['add-to-cart']);
 
 const addCart = (product: Menu) => {
