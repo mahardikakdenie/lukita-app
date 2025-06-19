@@ -4,7 +4,7 @@
 		<li v-for="(menu, i) in menus" :key="i" class="shrink-0">
 			<button
                 @click="onSetMenu(menu)"
-				class="px-5 py-2 text-sm font-medium rounded-lg transition-all duration-300 ease-in-out whitespace-nowrap"
+				class="px-5 py-2 text-sm font-medium rounded-lg transition-all duration-300 ease-in-out whitespace-nowrap cursor-pointer"
 				:class="
 					currentMenu === menu
 						? 'bg-blue-100 text-blue-700 border-blue-700 border'

@@ -127,11 +127,11 @@
 				<div v-if="voucherActive" class="flex justify-between mt-2">
 					<div>
 						<span class="font-bold class text-sm text-gray-500">
-							Diskon <Badge :text="voucherActive.discount" />
+							Diskon <Badge v-if="voucherActive.type === 'percentage'" :text="`${voucherActive.discount}%`" />
 						</span>
 					</div>
 					<div>
-						<Badge text="-Rp10.000" status="danger" />
+						<Badge :text="`-${formatToRupiah(discountPrice?.toString() || '')}`" status="danger" />
 					</div>
 				</div>
 				<div class="flex justify-between mt-2">
@@ -164,7 +164,7 @@
 
 			<div class="w-full">
 				<NuxtLink
-					to="/payment"
+					:to="selectOption === 'Tunai' ? '/' : '/payment'"
 					class="bg-blue-200 rounded-xl w-full text-blue-700 font-bold py-2 flex justify-center gap-2 cursor-pointer hover:bg-blue-100">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
@@ -188,7 +188,7 @@
 
 <script lang="ts" setup>
 
-interface Voucher {
+export interface Voucher {
     id: string;
     code: string,
     discount: string,
@@ -204,19 +204,25 @@ const props = defineProps<{
 	orders: Menu[];
 }>();
 const emits = defineEmits(['remove-cart']);
-
-const { 
-    subtotal,
-    taxCalculation,
-    totalPrice 
-} = useCartSummary(props.orders);
-
 const isVoucherLoading = ref<boolean>(false);
 const voucherInput = ref<string>('');
 const voucherActive = ref<Voucher | null>(null);
+const { 
+    subtotal,
+    taxCalculation,
+    totalPrice,
+} = useCartSummary(props.orders);
 
+const discountPrice = computed(() => {
+    if (voucherActive?.value && voucherActive?.value?.type === 'percentage') {
+        const discountPercentage = parseInt(voucherActive?.value?.discount) / 100;
+        return (totalPrice.value * discountPercentage);
+    } else if (voucherActive?.value && voucherActive?.value?.type === 'fixed_price') {
+        return voucherActive?.value?.discount;
+    }
+    return 0;
+});
 
-    
 const fetchDiscount = async () => {
     isVoucherLoading.value = true;
   try {

@@ -6,7 +6,7 @@
 				<HeaderMenu
 					:menus="menus"
 					:current-menu="currentMenu"
-					@on-set-menu="(menu) => (currentMenu = menu)" />
+					@on-set-menu="onChangeMenu" />
 				<hr class="border-gray-200" />
 
 				<HomeContent :carts="carts" @add-to-cart="addToCarts" />
@@ -36,6 +36,21 @@ const currentMenu = ref<string>('Hidangan Utama');
 
 const addToCarts = (product: Menu) => {
 	addToCart(product);
+};
+
+
+const fetchProducts = async () => {
+    const products = await $fetch<Menu[]>('/api/product', {
+        params: {
+            category: currentMenu.value?.split(' ').join('-').toLowerCase(),
+        },
+    });
+};
+
+const onChangeMenu = (menu: string) => {
+	currentMenu.value = menu;
+
+	fetchProducts();
 };
 
 const onRemoveCart = (cartProduct: Menu) => {
