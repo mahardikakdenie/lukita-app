@@ -1,16 +1,16 @@
 <template>
 	<div class="mt-6">
 		<!-- Loader -->
-		<div v-if="pending" class="flex justify-center py-8">
+		<div v-if="isLoading" class="flex justify-center py-8">
 			<div class="loader"></div>
 		</div>
 
 		<!-- Menu Grid -->
 		<div
-			v-else
+            v-else
 			class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
 			<div
-				v-for="menu in data"
+				v-for="menu in products"
 				:key="menu.name"
 				class="bg-gray-50 border border-gray-200 rounded-lg overflow-hidden transition hover:bg-gray-100">
 				<ImageLoader
@@ -58,14 +58,9 @@ export interface Menu {
 
 const props = defineProps<{
 	carts: Menu[];
+    products: Menu[] | null;
+    isLoading: Boolean;
 }>();
-
-const { data, pending, error } = await useFetch<Menu[]>('/api/product', {
-	server: true,
-	params: {
-		type: 'hidangan-utama',
-	},
-});
 
 const emits = defineEmits(['add-to-cart']);
 
