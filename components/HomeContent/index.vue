@@ -7,19 +7,17 @@
 
 		<!-- Menu Grid -->
 		<div
-            v-else
+			v-else-if="!isLoading && products && products.length > 0"
 			class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
 			<div
 				v-for="menu in products"
 				:key="menu.name"
 				class="bg-gray-50 border border-gray-200 rounded-lg overflow-hidden transition hover:bg-gray-100">
-				<ImageLoader
-					:image="menu.image"
-					class="w-full object-cover" />
+				<ImageLoader :image="menu.image" class="w-full object-cover" />
 				<div class="p-3">
-                    <div class="py-1">
-                        <Badge :text="menu.type" />
-                    </div>
+					<div class="py-1">
+						<Badge :text="menu.type" />
+					</div>
 					<h3 class="font-semibold">{{ menu.name }}</h3>
 					<p class="text-sm text-gray-600 line-clamp-2">
 						{{ menu.description }}
@@ -42,6 +40,24 @@
 				</div>
 			</div>
 		</div>
+
+		<div
+			v-else-if="!isLoading && products && products.length === 0"
+			class="flex flex-col items-center justify-center py-12 px-4 text-center">
+			<!-- Gambar -->
+			<ImageLoader
+				image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRIZVOSdT_3y4XlZsUo3nTkVvHR27gli2UxwRRRP1bealcPxUgkBRYjeHQIg9fKPo_4JP0&usqp=CAU"
+				customClass="w-56 h-56 object-contain mb-4" />
+
+			<!-- Pesan Utama -->
+			<h3 class="text-lg font-semibold text-gray-800 mb-2">
+				Tidak Ada Data
+			</h3>
+			<p class="text-sm text-gray-500 mb-6 max-w-xs">
+				Tidak ada menu tersedia untuk kategori ini. Silakan pilih
+				kategori lain.
+			</p>
+		</div>
 	</div>
 </template>
 
@@ -58,8 +74,8 @@ export interface Menu {
 
 const props = defineProps<{
 	carts: Menu[];
-    products: Menu[] | null;
-    isLoading: Boolean;
+	products: Menu[] | null;
+	isLoading: Boolean;
 }>();
 
 const emits = defineEmits(['add-to-cart']);
