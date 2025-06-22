@@ -63,6 +63,7 @@
 
 <script setup lang="ts">
 export interface Menu {
+	id: string;
 	image: string;
 	name: string;
 	description: string;

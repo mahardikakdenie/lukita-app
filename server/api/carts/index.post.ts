@@ -5,8 +5,12 @@ const CartSchema = z.object({
     required_error: 'productId wajib diisi',
     invalid_type_error: 'productId harus berupa number'
   }),
-  quantity: z.number().min(1, { message: 'quantity minimal 1' })
-})
+  quantity: z.number().min(1, { message: 'quantity minimal 1' }),
+  name: z.string(),
+  type: z.string(),
+  price: z.string(),
+  status: z.string(),
+});
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event)
@@ -29,12 +33,15 @@ export default defineEventHandler(async (event) => {
     ...cartData
   }
 
-  // Kirim ke fake API (tidak akan tersimpan)
-  const res = await fetch('https://my-json-server.typicode.com/mahardikakdenie/db-catalog-json/carts', {
-    method: 'POST', // fake only
+  const config = useRuntimeConfig();
+  const res = await fetch(`${config.public.apiBaseUrl}/orders`, {
+    method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(newCart)
-  })
+  });
+
+  console.log("res:", res);
+  
 
   // Meskipun API ini tidak menyimpan, kita kembalikan seolah-olah sukses
   return newCart
