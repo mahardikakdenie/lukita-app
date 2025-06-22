@@ -40,7 +40,7 @@ const { data,pending ,refresh } = useAsyncData<Menu[]>(
   'products',
   async () => {
     const category = currentMenu.value.split(' ').join('-').toLowerCase()
-    const products = await $fetch<Menu[]>('/api/product', {
+    const products = await $fetch<Menu[]>('/api/products', {
       params: { category },
     })
     return products
