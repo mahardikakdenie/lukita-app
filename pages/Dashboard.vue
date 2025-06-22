@@ -8,7 +8,6 @@
 					:current-menu="currentMenu"
 					@on-set-menu="onChangeMenu" />
 				<hr class="border-gray-200" />
-<!-- {{data}} -->
 				<HomeContent :carts="carts" :products="data" :isLoading=pending @add-to-cart="addToCarts" />
 			</div>
 
