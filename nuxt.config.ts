@@ -12,5 +12,10 @@ export default defineNuxtConfig({
   },
   modules: [
     // 'nuxt-sweetalert2'
-  ]
+  ],
+  runtimeConfig:{
+    public: {
+      apiBaseUrl: process.env.VITE_API_BASE_URL || 'https://default-api-url.com', 
+    }
+  }
 })
