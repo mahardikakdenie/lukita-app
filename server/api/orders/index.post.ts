@@ -2,20 +2,16 @@ import { z } from 'zod';
 import { defineEventHandler, readBody, createError } from 'h3';
 
 const CartItemSchema = z.object({
-	productId: z.number({ required_error: 'productId wajib diisi' }),
-	quantity: z.number().min(1, { message: 'quantity minimal 1' }),
-	name: z.string(),
-	type: z.string(),
-	price: z.string(),
+	type_discount: z.string(),
+	discount_price: z.string(),
+	total_price: z.string(),
 	status: z.string(),
 });
-
-const CartSchema = z.array(CartItemSchema);
 
 export default defineEventHandler(async (event) => {
 	const body = await readBody(event);
 
-	const result = CartSchema.safeParse(body);
+	const result = CartItemSchema.safeParse(body);
 
 	if (!result.success) {
 		// Ubah error menjadi struktur yang lebih mudah dibaca
@@ -40,14 +36,11 @@ export default defineEventHandler(async (event) => {
 	}
 
 	const config = useRuntimeConfig();
-	for (let index = 0; index < body.length; index++) {
-		const element = body[index];
-		await $fetch(`${config.public.apiBaseUrl}/orders`, {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: element,
-		});
-	}
+  await $fetch(`${config.public.apiBaseUrl}/orders`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: body,
+  });
 
 	// Simpan pesanan ke database atau lakukan logika lain
 	return {

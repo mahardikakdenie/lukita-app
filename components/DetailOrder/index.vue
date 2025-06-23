@@ -353,13 +353,16 @@ const reduceQuantity = (order: Menu) => {
 
 const createOrder = async () => {
 	isLoading.value = true;
-	const params = props?.orders?.map((order) => {
-		return {
+	const params = {
+		status: 'progress',
+		products: props?.orders.map(order => ({
 			...order,
-			productId: parseInt(order?.id),
-			status: 'progress',
-		};
-	});
+			quantity: order?.quantity > 1 ? order.quantity : 1,
+		})),
+		type_discount: voucherActive?.value?.type ?? '',
+		discount_price: discountPrice.value.toString(),
+		total_price: totalPrice.value.toString(),
+	}
 
 	try {
 		const res = await $fetch('/api/orders', {

@@ -50,7 +50,7 @@
 					<div class="flex justify-between items-start mb-4">
 						<h3
 							class="text-lg font-semibold text-gray-800 truncate">
-							{{ summary.name }}
+							Status
 						</h3>
 						<span
 							class="inline-flex items-center px-3 py-1 text-xs font-medium rounded-full capitalize"
@@ -74,7 +74,13 @@
 								>Quantity</span
 							>
 							<p class="font-medium text-gray-800">
-								{{ summary.quantity }}
+								{{
+									summary.products?.reduce(
+										(sum, product) =>
+											sum + (product.quantity || 0),
+										0
+									) ?? 0
+								}}
 							</p>
 						</div>
 					</div>
@@ -86,16 +92,20 @@
 								>Harga Satuan</span
 							>
 							<p class="font-semibold text-gray-900 text-xs">
-								{{ formatToRupiah(summary.price) }}
+								{{ summary.type_discount }}
 							</p>
 						</div>
 						<div class="flex justify-between items-center">
 							<span class="text-xs text-gray-500"
 								>Diskon / Potongan</span
 							>
-							<p
-								class="font-semibold text-gray-900 text-xs">
-								{{ formatToRupiah(summary.price) }}
+							<p class="font-semibold text-gray-900 text-xs">
+								{{
+									formatToRupiah(
+										summary.discount_price?.toString() ||
+											'0'
+									)
+								}}
 							</p>
 						</div>
 						<div
@@ -104,7 +114,7 @@
 								>Total</span
 							>
 							<p class="font-bold text-lg text-gray-900">
-								{{ formatToRupiah(summary.price) }}
+								{{ formatToRupiah(summary.total_price || '0') }}
 							</p>
 						</div>
 					</div>
@@ -205,66 +215,99 @@
 				title="Order Detail"
 				@on-close="isModal = false">
 				<!-- Slot: Detail Order -->
-				<div class="space-y-4">
-					<div class="flex items-center gap-4">
-						<img
-							:src="order?.image"
-							alt="Product Image"
-							class="w-16 h-16 object-cover rounded-md" />
+				<div class="space-y-6">
+					<!-- Form Update Status -->
+					<div
+						class="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+						<h4 class="font-semibold text-gray-700 mb-3">
+							Ubah Status Pesanan
+						</h4>
 						<div>
-							<h3 class="font-semibold text-gray-800">
-								{{ order?.name }}
-							</h3>
-							<p class="text-sm text-gray-600">
-								ID: {{ order?.id }}
-							</p>
+							<label
+								for="status"
+								class="block text-sm font-medium text-gray-700 mb-1">
+								Status Saat Ini:
+							</label>
+							<select
+								v-model="selectedStatus"
+								id="status"
+								class="w-full border border-gray-300 rounded-md p-2 text-sm focus:ring-blue-500 focus:border-blue-500 bg-white">
+								<option
+									v-for="(status, i) in statusOptions"
+									:key="i"
+									:value="status">
+									{{
+										capitalizeWords(
+											status.replace('_', ' ')
+										)
+									}}
+								</option>
+							</select>
 						</div>
 					</div>
+					<!-- Daftar Produk -->
+					<div class="mb-4 space-y-4 overflow-y-auto h-[70%] pr-2">
+						<!-- Ganti 'max-h-60' sesuai kebutuhan -->
+						<div
+							v-for="(product, i) in order?.products"
+							:key="i"
+							class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 transition-all duration-200 hover:shadow-md">
+							<div class="flex items-start gap-4">
+								<!-- Gambar Produk -->
+								<img
+									:src="product?.image"
+									alt="Product Image"
+									class="w-16 h-16 object-cover rounded-lg" />
 
-					<div class="grid grid-cols-2 gap-4 text-sm">
-						<div>
-							<span class="block text-xs text-gray-500"
-								>Jumlah</span
-							>
-							<p class="text-gray-800">{{ order?.quantity }}</p>
-						</div>
-						<div>
-							<span class="block text-xs text-gray-500"
-								>Harga</span
-							>
-							<p class="text-gray-800">
-								{{
-									formatToRupiah(
-										order?.price.toString() ?? ''
-									)
-								}}
-							</p>
-						</div>
-						<div>
-							<span class="block text-xs text-gray-500"
-								>Kategori</span
-							>
-							<p class="text-gray-800">{{ order?.type }}</p>
-						</div>
-					</div>
+								<!-- Detail Produk -->
+								<div class="flex-1">
+									<h3
+										class="font-semibold text-gray-800 text-lg">
+										{{ product?.name }}
+									</h3>
 
-					<!-- Status Form -->
-					<div>
-						<label
-							for="status"
-							class="block text-sm font-medium text-gray-700 mb-1"
-							>Status Saat Ini:</label
-						>
-						<select
-							v-model="selectedStatus"
-							id="status"
-							class="w-full border border-gray-300 rounded-md p-2 text-sm focus:ring-blue-500 focus:border-blue-500">
-							<option
-								v-for="(status, i) in statusOptions"
-								:value="status">
-								{{ capitalizeWords(status.replace('_', ' ')) }}
-							</option>
-						</select>
+									<!-- Grid Info -->
+									<div
+										class="grid grid-cols-2 gap-x-4 gap-y-2 mt-3 text-sm">
+										<div>
+											<span
+												class="block text-xs text-gray-500"
+												>Jumlah</span
+											>
+											<p
+												class="text-gray-800 font-medium">
+												{{ product?.quantity }}
+											</p>
+										</div>
+										<div>
+											<span
+												class="block text-xs text-gray-500"
+												>Harga</span
+											>
+											<p
+												class="text-gray-800 font-medium">
+												{{
+													formatToRupiah(
+														product?.price.toString() ??
+															''
+													)
+												}}
+											</p>
+										</div>
+										<div>
+											<span
+												class="block text-xs text-gray-500"
+												>Kategori</span
+											>
+											<p
+												class="text-gray-800 font-medium">
+												{{ product?.type }}
+											</p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 			</Modal>

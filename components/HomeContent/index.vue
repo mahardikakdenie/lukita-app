@@ -70,7 +70,7 @@ export interface Menu {
 	price: string;
 	category: string;
 	type: string;
-	quantity?: number;
+	quantity: number;
 }
 
 const props = defineProps<{
