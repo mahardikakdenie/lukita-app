@@ -171,7 +171,7 @@
 							Ini:</label>
 						<select v-model="selectedStatus" id="status"
 							class="w-full border border-gray-300 rounded-md p-2 text-sm focus:ring-blue-500 focus:border-blue-500">
-							<option v-for="(status, i) in statusOptions" :value="status">{{ capitalizeWords(status) }}
+							<option v-for="(status, i) in statusOptions" :value="status">{{ capitalizeWords(status.replace('_', ' ')) }}
 							</option>
 						</select>
 					</div>
