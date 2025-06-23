@@ -15,7 +15,7 @@
 
 				<div class="flex items-center justify-end">
 					<button @click="$router.push('/dashboard')"
-						class="bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl px-5 py-2 transition-all duration-200 flex items-center gap-2">
+						class="bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl px-5 cursor-pointer py-2 transition-all duration-200 flex items-center gap-2">
 						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
 							class="w-4 h-4">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
