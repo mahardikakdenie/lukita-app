@@ -18,10 +18,12 @@
 </template>
 
 <script setup lang="ts">
-import type { Menu } from '~/components/HomeContent/index.vue'
-import { useCarts } from '~/composables/useCarts'
+import type { Menu } from '~/components/HomeContent/index.vue';
+import { useCarts } from '~/composables/useCarts';
 
 const { carts, addToCart } = useCarts()
+const router = useRouter()
+const route = useRoute()
 
 // Kategori & Menu
 const menus = ref<string[]>([
@@ -32,12 +34,21 @@ const menus = ref<string[]>([
   'Paket Promo',
   'Menu Musiman',
 ])
-const currentMenu = ref<string>('Hidangan Utama')
+const currentMenu = ref<string>('')
 
 // Fetch produk secara reaktif + SSR support
-const { data,pending ,refresh } = useAsyncData<Menu[]>(
+const { data, pending, refresh } = useAsyncData<Menu[]>(
   'products',
   async () => {
+    if (!currentMenu.value) {
+      const queryCategory = route.query.category
+
+      if (typeof queryCategory === 'string') {
+        currentMenu.value = queryCategory
+      } else if (Array.isArray(queryCategory)) {
+        currentMenu.value = queryCategory[0] || 'Hidangan Utama'
+      }
+    }
     const category = currentMenu.value.split(' ').join('-').toLowerCase()
     const products = await $fetch<Menu[]>('/api/products', {
       params: { category },
@@ -46,14 +57,14 @@ const { data,pending ,refresh } = useAsyncData<Menu[]>(
   },
   {
     watch: [currentMenu],
-    // initialCache: false,
   }
 )
 
 // Fungsi ketika kategori berubah
 const onChangeMenu = (menu: string) => {
   currentMenu.value = menu
-//   refresh() // refresh data sesuai kategori baru
+  const category = currentMenu.value.split(' ').join('-').toLowerCase()
+  router.push({ query: { ...route.query, category } })
 }
 
 // Fungsi tambah ke keranjang
@@ -70,4 +81,47 @@ const onRemoveCart = (cartProduct: Menu) => {
     carts.value?.splice(indexCart, 1)
   }
 }
+
+// Helper untuk capitalize
+const capitalizeWords = (str: string): string => {
+  return str
+    .replace(/-/g, ' ')
+    .replace(/\b\w/g, (char) => char.toUpperCase())
+}
+
+// Logika utama: cek route.query.category saat halaman pertama kali dimuat
+onMounted(async () => {
+  let selectedCategory = 'Hidangan Utama'
+
+  const queryCategory = route.query.category
+
+  if (typeof queryCategory === 'string') {
+    selectedCategory = queryCategory
+  } else if (Array.isArray(queryCategory)) {
+    selectedCategory = queryCategory[0] || 'Hidangan Utama'
+  }
+
+  // Set currentMenu setelah capitalize
+  currentMenu.value = capitalizeWords(selectedCategory)
+
+  // Refresh data jika diperlukan
+  await refresh()
+})
+
+// Watch route.query.category untuk update dinamis
+watch(
+  () => route.query.category,
+  async (newVal) => {
+    let selectedCategory = 'Hidangan Utama'
+
+    if (typeof newVal === 'string') {
+      selectedCategory = newVal
+    } else if (Array.isArray(newVal)) {
+      selectedCategory = newVal[0] || 'Hidangan Utama'
+    }
+
+    currentMenu.value = capitalizeWords(selectedCategory)
+    await refresh()
+  }
+)
 </script>

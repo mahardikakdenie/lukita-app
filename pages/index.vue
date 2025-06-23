@@ -14,11 +14,20 @@
 				</div>
 
 				<div class="flex items-center justify-end">
-					<button @click="$router.push('/dashboard')"
+					<button
+						@click="$router.push('/dashboard')"
 						class="bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl px-5 py-2 transition-all duration-200 flex items-center gap-2">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke="currentColor"
 							class="w-4 h-4">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="2"
+								d="M12 4v16m8-8H4" />
 						</svg>
 						Buat Pesanan Baru
 					</button>
@@ -26,15 +35,21 @@
 			</div>
 
 			<!-- List Pesanan -->
-			<div v-if="!pending && data && data.length > 0"
+			<div
+				v-if="!pending && data && data.length > 0"
 				class="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-				<div v-for="(summary, i) in data" :key="i"
+				<div
+					v-for="(summary, i) in data"
+					:key="i"
 					class="p-6 rounded-2xl shadow-md hover:shadow-lg bg-white border-l-4 transition-all duration-300"
 					:class="getStatusBorderColor(summary.status)">
 					<!-- Header -->
 					<div class="flex justify-between items-start mb-4">
-						<h3 class="text-lg font-semibold text-gray-800">{{ summary.name }}</h3>
-						<span class="inline-flex items-center px-3 py-1 text-xs font-semibold rounded-full capitalize"
+						<h3 class="text-lg font-semibold text-gray-800">
+							{{ summary.name }}
+						</h3>
+						<span
+							class="inline-flex items-center px-3 py-1 text-xs font-semibold rounded-full capitalize"
 							:class="getStatusColor(summary.status)">
 							{{ summary.status }}
 						</span>
@@ -43,18 +58,29 @@
 					<!-- Grid Info -->
 					<div class="grid grid-cols-2 gap-4 text-sm">
 						<div>
-							<span class="block text-xs text-gray-500">Order ID</span>
-							<p class="font-medium text-gray-800">#{{ summary.id }}</p>
+							<span class="block text-xs text-gray-500"
+								>Order ID</span
+							>
+							<p class="font-medium text-gray-800">
+								#{{ summary.id }}
+							</p>
 						</div>
 						<div class="text-right">
-							<span class="block text-xs text-gray-500">Quantity</span>
-							<p class="font-medium text-gray-800">{{ summary.quantity }}</p>
+							<span class="block text-xs text-gray-500"
+								>Quantity</span
+							>
+							<p class="font-medium text-gray-800">
+								{{ summary.quantity }}
+							</p>
 						</div>
 					</div>
 
 					<!-- Action Button (Optional) -->
-					<div class="mt-5 pt-5 border-t border-gray-100 flex justify-end">
-						<button class="text-blue-600 hover:text-blue-800 text-sm font-medium cursor-pointer" @click="openModal(summary)">
+					<div
+						class="mt-5 pt-5 border-t border-gray-100 flex justify-end">
+						<button
+							class="text-blue-600 hover:text-blue-800 text-sm font-medium cursor-pointer"
+							@click="openModal(summary)">
 							View Details →
 						</button>
 					</div>
@@ -78,11 +104,14 @@
 
 			<!-- Grid Menu -->
 			<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-				<div v-for="menu in menus" :key="menu.id"
+				<div
+					v-for="menu in menus"
+					:key="menu.id"
 					class="rounded-2xl bg-gray-50 hover:bg-gray-100 transition duration-200 shadow-sm hover:shadow-md flex flex-col justify-between h-full">
 					<div class="p-4">
 						<div class="flex gap-4">
-							<img class="rounded-xl w-16 h-16 object-cover"
+							<img
+								class="rounded-xl w-16 h-16 object-cover"
 								src="https://img.lovepik.com/png/20231126/thanksgiving-day-dish-icon-to-set-a-dinner-menu-i_704879_wh1200.png"
 								:alt="menu.name" />
 							<div class="flex flex-col justify-center">
@@ -96,12 +125,24 @@
 						</div>
 					</div>
 
-					<div class="border-t border-gray-200 p-3 flex items-center justify-between">
-						<span class="text-blue-600 text-sm font-medium cursor-pointer hover:underline">Lihat
-							Semua</span>
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+					<div
+						class="border-t border-gray-200 p-3 flex items-center justify-between">
+						<NuxtLink
+							:to="`/dashboard?category=${menu.name?.replace(' ', '-').toLowerCase()}`"
+							class="text-blue-600 text-sm font-medium cursor-pointer hover:underline"
+							>Lihat Semua</NuxtLink
+						>
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke="currentColor"
 							class="w-5 h-5 text-blue-600">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="2"
+								d="M9 5l7 7-7 7" />
 						</svg>
 					</div>
 				</div>
@@ -109,59 +150,80 @@
 		</section>
 
 		<teleport to="body">
-			<Modal :is-open="isModal" title="Order Detail" @on-close="isModal = false">
-				 <!-- Slot: Detail Order -->
-      <div class="space-y-4">
-        <div class="flex items-center gap-4">
-          <img :src="order?.image" alt="Product Image" class="w-16 h-16 object-cover rounded-md" />
-          <div>
-            <h3 class="font-semibold text-gray-800">{{ order?.name }}</h3>
-            <p class="text-sm text-gray-600">ID: {{ order?.id }}</p>
-          </div>
-        </div>
+			<Modal
+				:is-open="isModal"
+				title="Order Detail"
+				@on-close="isModal = false">
+				<!-- Slot: Detail Order -->
+				<div class="space-y-4">
+					<div class="flex items-center gap-4">
+						<img
+							:src="order?.image"
+							alt="Product Image"
+							class="w-16 h-16 object-cover rounded-md" />
+						<div>
+							<h3 class="font-semibold text-gray-800">
+								{{ order?.name }}
+							</h3>
+							<p class="text-sm text-gray-600">
+								ID: {{ order?.id }}
+							</p>
+						</div>
+					</div>
 
-        <div class="grid grid-cols-2 gap-4 text-sm">
-          <div>
-            <span class="block text-xs text-gray-500">Tanggal</span>
-            <p class="text-gray-800">{{ order?.createdAt }}</p>
-          </div>
-          <div>
-            <span class="block text-xs text-gray-500">Jumlah</span>
-            <p class="text-gray-800">{{ order?.quantity }}</p>
-          </div>
-          <div>
-            <span class="block text-xs text-gray-500">Harga</span>
-            <p class="text-gray-800">{{ order?.price }}</p>
-          </div>
-          <div>
-            <span class="block text-xs text-gray-500">Kategori</span>
-            <p class="text-gray-800">{{ order?.type }}</p>
-          </div>
-        </div>
+					<div class="grid grid-cols-2 gap-4 text-sm">
+						<div>
+							<span class="block text-xs text-gray-500"
+								>Tanggal</span
+							>
+							<p class="text-gray-800">{{ order?.createdAt }}</p>
+						</div>
+						<div>
+							<span class="block text-xs text-gray-500"
+								>Jumlah</span
+							>
+							<p class="text-gray-800">{{ order?.quantity }}</p>
+						</div>
+						<div>
+							<span class="block text-xs text-gray-500"
+								>Harga</span
+							>
+							<p class="text-gray-800">{{ order?.price }}</p>
+						</div>
+						<div>
+							<span class="block text-xs text-gray-500"
+								>Kategori</span
+							>
+							<p class="text-gray-800">{{ order?.type }}</p>
+						</div>
+					</div>
 
-        <!-- Status Form -->
-        <div>
-          <label for="status" class="block text-sm font-medium text-gray-700 mb-1">Status Saat Ini:</label>
-          <select
-            v-model="selectedStatus"
-            id="status"
-            class="w-full border border-gray-300 rounded-md p-2 text-sm focus:ring-blue-500 focus:border-blue-500"
-          >
-            <option value="pending">Pending</option>
-            <option value="progress">Progress</option>
-            <option value="shipped">Shipped</option>
-            <option value="completed">Completed</option>
-            <option value="cancelled">Cancelled</option>
-          </select>
-        </div>
-      </div>
-
-			</Modal>	
+					<!-- Status Form -->
+					<div>
+						<label
+							for="status"
+							class="block text-sm font-medium text-gray-700 mb-1"
+							>Status Saat Ini:</label
+						>
+						<select
+							v-model="selectedStatus"
+							id="status"
+							class="w-full border border-gray-300 rounded-md p-2 text-sm focus:ring-blue-500 focus:border-blue-500">
+							<option value="pending">Pending</option>
+							<option value="progress">Progress</option>
+							<option value="shipped">Shipped</option>
+							<option value="completed">Completed</option>
+							<option value="cancelled">Cancelled</option>
+						</select>
+					</div>
+				</div>
+			</Modal>
 		</teleport>
 	</div>
 </template>
 
 <script lang="ts" setup>
+import { NuxtLink } from '#components';
 import { ref } from 'vue';
 import type { Order } from '~/types/interfaces/OrderInterface';
 
@@ -172,7 +234,6 @@ interface Summary {
 	time_estimation: string;
 	order_quantity: string;
 }
-
 
 const isModal = ref<boolean>(false);
 const selectedStatus = ref<string>('');
