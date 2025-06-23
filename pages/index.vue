@@ -14,11 +14,20 @@
 				</div>
 
 				<div class="flex items-center justify-end">
-					<button @click="$router.push('/dashboard')"
+					<button
+						@click="$router.push('/dashboard')"
 						class="bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl px-5 cursor-pointer py-2 transition-all duration-200 flex items-center gap-2">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke="currentColor"
 							class="w-4 h-4">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="2"
+								d="M12 4v16m8-8H4" />
 						</svg>
 						Buat Pesanan Baru
 					</button>
@@ -29,41 +38,82 @@
 				<div class="loader"></div>
 			</div>
 			<!-- List Pesanan -->
-			<div v-else-if="!pending && data && data.length > 0"
+			<div
+				v-else-if="!pending && data && data.length > 0"
 				class="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-				<div v-for="(summary, i) in data" :key="i"
-					class="p-6 rounded-2xl shadow-md hover:shadow-lg bg-white border-l-4 transition-all duration-300"
+				<div
+					v-for="(summary, i) in data"
+					:key="i"
+					class="p-6 rounded-2xl shadow-md hover:shadow-xl bg-white border-l-4 transition-all duration-300 transform hover:-translate-y-1"
 					:class="getStatusBorderColor(summary.status)">
 					<!-- Header -->
 					<div class="flex justify-between items-start mb-4">
-						<h3 class="text-lg font-semibold text-gray-800">
+						<h3
+							class="text-lg font-semibold text-gray-800 truncate">
 							{{ summary.name }}
 						</h3>
-						<span class="inline-flex items-center px-3 py-1 text-xs font-semibold rounded-full capitalize"
+						<span
+							class="inline-flex items-center px-3 py-1 text-xs font-medium rounded-full capitalize"
 							:class="getStatusColor(summary.status)">
 							{{ summary.status }}
 						</span>
 					</div>
 
-					<!-- Grid Info -->
-					<div class="grid grid-cols-2 gap-4 text-sm">
+					<!-- Info Grid -->
+					<div class="grid grid-cols-2 gap-4 text-sm mb-5">
 						<div>
-							<span class="block text-xs text-gray-500">Order ID</span>
+							<span class="block text-xs text-gray-500"
+								>Order ID</span
+							>
 							<p class="font-medium text-gray-800">
 								#{{ summary.id }}
 							</p>
 						</div>
 						<div class="text-right">
-							<span class="block text-xs text-gray-500">Quantity</span>
+							<span class="block text-xs text-gray-500"
+								>Quantity</span
+							>
 							<p class="font-medium text-gray-800">
 								{{ summary.quantity }}
 							</p>
 						</div>
 					</div>
 
-					<!-- Action Button (Optional) -->
-					<div class="mt-5 pt-5 border-t border-gray-100 flex justify-end">
-						<button class="text-blue-600 hover:text-blue-800 text-sm font-medium cursor-pointer"
+					<!-- Harga dan Diskon -->
+					<div class="space-y-2 text-sm mb-5">
+						<div class="flex justify-between items-center">
+							<span class="text-xs text-gray-500"
+								>Harga Satuan</span
+							>
+							<p class="font-semibold text-gray-900 text-xs">
+								{{ formatToRupiah(summary.price) }}
+							</p>
+						</div>
+						<div class="flex justify-between items-center">
+							<span class="text-xs text-gray-500"
+								>Diskon / Potongan</span
+							>
+							<p
+								class="font-semibold text-gray-900 text-xs">
+								{{ formatToRupiah(summary.price) }}
+							</p>
+						</div>
+						<div
+							class="flex justify-between items-center pt-2 border-t border-gray-100 mt-1">
+							<span class="text-xs text-gray-600 font-medium"
+								>Total</span
+							>
+							<p class="font-bold text-lg text-gray-900">
+								{{ formatToRupiah(summary.price) }}
+							</p>
+						</div>
+					</div>
+
+					<!-- Action Button -->
+					<div
+						class="mt-4 pt-4 border-t border-gray-100 flex justify-end">
+						<button
+							class="text-blue-600 hover:text-blue-800 text-sm font-medium transition-colors duration-200"
 							@click="openModal(summary)">
 							View Details →
 						</button>
@@ -71,19 +121,23 @@
 				</div>
 			</div>
 
-			<div v-else-if="!pending && data && data.length === 0"
+			<div
+				v-else-if="!pending && data && data.length === 0"
 				class="flex flex-col items-center justify-center py-12 px-4 text-center">
 				<!-- Gambar -->
-				<img src="https://cdn-icons-png.flaticon.com/512/7466/7466140.png" alt="Tidak ada pesanan"
+				<img
+					src="https://cdn-icons-png.flaticon.com/512/7466/7466140.png"
+					alt="Tidak ada pesanan"
 					class="w-24 h-24 mb-4 opacity-70" />
 
-				<h3 class="text-xl font-semibold text-gray-800 mb-2">Belum Ada Pesanan Masuk</h3>
+				<h3 class="text-xl font-semibold text-gray-800 mb-2">
+					Belum Ada Pesanan Masuk
+				</h3>
 				<p class="text-gray-500 mb-6 max-w-md">
-					Saat ini belum ada pesanan masuk. Silakan periksa kembali nanti.
+					Saat ini belum ada pesanan masuk. Silakan periksa kembali
+					nanti.
 				</p>
-
 			</div>
-
 
 			<!-- Catatan Kecil -->
 			<div class="mt-6 text-sm text-gray-600">
@@ -98,11 +152,14 @@
 
 			<!-- Grid Menu -->
 			<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-				<div v-for="menu in menus" :key="menu.id"
+				<div
+					v-for="menu in menus"
+					:key="menu.id"
 					class="rounded-2xl bg-gray-50 hover:bg-gray-100 transition duration-200 shadow-sm hover:shadow-md flex flex-col justify-between h-full">
 					<div class="p-4">
 						<div class="flex gap-4">
-							<img class="rounded-xl w-16 h-16 object-cover"
+							<img
+								class="rounded-xl w-16 h-16 object-cover"
 								src="https://img.lovepik.com/png/20231126/thanksgiving-day-dish-icon-to-set-a-dinner-menu-i_704879_wh1200.png"
 								:alt="menu.name" />
 							<div class="flex flex-col justify-center">
@@ -116,14 +173,26 @@
 						</div>
 					</div>
 
-					<div class="border-t border-gray-200 p-3 flex items-center justify-between">
-						<NuxtLink :to="`/dashboard?category=${menu.name
-							?.replace(' ', '-')
-							.toLowerCase()}`" class="text-blue-600 text-sm font-medium cursor-pointer hover:underline">Lihat Semua
+					<div
+						class="border-t border-gray-200 p-3 flex items-center justify-between">
+						<NuxtLink
+							:to="`/dashboard?category=${menu.name
+								?.replace(' ', '-')
+								.toLowerCase()}`"
+							class="text-blue-600 text-sm font-medium cursor-pointer hover:underline"
+							>Lihat Semua
 						</NuxtLink>
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke="currentColor"
 							class="w-5 h-5 text-blue-600">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="2"
+								d="M9 5l7 7-7 7" />
 						</svg>
 					</div>
 				</div>
@@ -131,11 +200,17 @@
 		</section>
 
 		<teleport to="body">
-			<Modal :is-open="isModal" title="Order Detail" @on-close="isModal = false">
+			<Modal
+				:is-open="isModal"
+				title="Order Detail"
+				@on-close="isModal = false">
 				<!-- Slot: Detail Order -->
 				<div class="space-y-4">
 					<div class="flex items-center gap-4">
-						<img :src="order?.image" alt="Product Image" class="w-16 h-16 object-cover rounded-md" />
+						<img
+							:src="order?.image"
+							alt="Product Image"
+							class="w-16 h-16 object-cover rounded-md" />
 						<div>
 							<h3 class="font-semibold text-gray-800">
 								{{ order?.name }}
@@ -148,26 +223,46 @@
 
 					<div class="grid grid-cols-2 gap-4 text-sm">
 						<div>
-							<span class="block text-xs text-gray-500">Jumlah</span>
+							<span class="block text-xs text-gray-500"
+								>Jumlah</span
+							>
 							<p class="text-gray-800">{{ order?.quantity }}</p>
 						</div>
 						<div>
-							<span class="block text-xs text-gray-500">Harga</span>
-							<p class="text-gray-800">{{ formatToRupiah(order?.price.toString() ?? '') }}</p>
+							<span class="block text-xs text-gray-500"
+								>Harga</span
+							>
+							<p class="text-gray-800">
+								{{
+									formatToRupiah(
+										order?.price.toString() ?? ''
+									)
+								}}
+							</p>
 						</div>
 						<div>
-							<span class="block text-xs text-gray-500">Kategori</span>
+							<span class="block text-xs text-gray-500"
+								>Kategori</span
+							>
 							<p class="text-gray-800">{{ order?.type }}</p>
 						</div>
 					</div>
 
 					<!-- Status Form -->
 					<div>
-						<label for="status" class="block text-sm font-medium text-gray-700 mb-1">Status Saat
-							Ini:</label>
-						<select v-model="selectedStatus" id="status"
+						<label
+							for="status"
+							class="block text-sm font-medium text-gray-700 mb-1"
+							>Status Saat Ini:</label
+						>
+						<select
+							v-model="selectedStatus"
+							id="status"
 							class="w-full border border-gray-300 rounded-md p-2 text-sm focus:ring-blue-500 focus:border-blue-500">
-							<option v-for="(status, i) in statusOptions" :value="status">{{ capitalizeWords(status.replace('_', ' ')) }}
+							<option
+								v-for="(status, i) in statusOptions"
+								:value="status">
+								{{ capitalizeWords(status.replace('_', ' ')) }}
 							</option>
 						</select>
 					</div>
@@ -217,8 +312,8 @@ const statusOptions = ref<string[]>([
 	'completed',
 	'cancelled',
 	'rejected',
-	'refunded'
-])
+	'refunded',
+]);
 
 const openModal = (orderData: Order) => {
 	order.value = orderData;
@@ -297,10 +392,8 @@ const getStatusBorderColor = (status: string) => {
 const capitalizeWords = (str: string): string => {
 	return str
 		.replace(/-/g, ' ')
-		.replace(/\b\w/g, (char) => char.toUpperCase())
-}
-
-
+		.replace(/\b\w/g, (char) => char.toUpperCase());
+};
 </script>
 
 <style scoped>
