@@ -178,23 +178,27 @@
 
 			<!-- Tombol Bayar -->
 			<div class="pt-2">
-				<NuxtLink
-					:to="selectOption === 'Tunai' ? '/' : '/payment'"
-					class="flex items-center justify-center gap-2 w-full bg-blue-100 hover:bg-blue-200 text-blue-700 font-bold py-3 rounded-xl transition duration-200">
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						fill="none"
-						viewBox="0 0 24 24"
-						stroke-width="1.5"
-						stroke="currentColor"
-						class="w-5 h-5">
-						<path
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5 0H21a.75.75 0 0 0 .75-.75v-.75m0 0H3.75M3.75 12H3v-.25A.75.75 0 0 1 3.75 11.25h16.5a.75.75 0 0 1 .75.75v.25m-18 0h18M5.625 7.5h12.75c.621 0 1.125.504 1.125 1.125v1.125a3.375 3.375 0 0 1-3.375 3.375H12a3.375 3.375 0 0 1-3.375-3.375V8.625A1.125 1.125 0 0 1 9.75 7.5h4.5z" />
-					</svg>
-					Selesaikan Pembayaran
-				</NuxtLink>
+				<button
+					@click="createOrder"
+					:disabled="orders.length === 0"
+					class="flex items-center justify-center gap-2 w-full bg-blue-100 hover:bg-blue-200 disabled:cursor-not-allowed disabled:bg-blue-50 disabled:text-blue-200 cursor-pointer text-blue-700 font-bold py-3 rounded-xl transition duration-200">
+					<div v-if="isLoading" class="loader"></div>
+					<div v-else class="flex">
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke-width="1.5"
+							stroke="currentColor"
+							class="w-5 h-5">
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5 0H21a.75.75 0 0 0 .75-.75v-.75m0 0H3.75M3.75 12H3v-.25A.75.75 0 0 1 3.75 11.25h16.5a.75.75 0 0 1 .75.75v.25m-18 0h18M5.625 7.5h12.75c.621 0 1.125.504 1.125 1.125v1.125a3.375 3.375 0 0 1-3.375 3.375H12a3.375 3.375 0 0 1-3.375-3.375V8.625A1.125 1.125 0 0 1 9.75 7.5h4.5z" />
+						</svg>
+						Selesaikan Pembayaran
+					</div>
+				</button>
 			</div>
 		</div>
 	</div>
@@ -213,12 +217,15 @@ import { NuxtLink } from '#components';
 import { PlusIcon, MinusIcon } from '@heroicons/vue/24/solid';
 import type { Menu } from '../HomeContent/index.vue';
 import ImageLoader from '../imageLoader.vue';
+import type { Order } from '~/types/interfaces/OrderInterface';
 
 const props = defineProps<{
 	orders: Menu[];
 }>();
 const emits = defineEmits(['remove-cart']);
+const router = useRouter();
 const isVoucherLoading = ref<boolean>(false);
+const isLoading = ref<boolean>(false);
 const voucherInput = ref<string>('');
 const voucherActive = ref<Voucher | null>(null);
 const { subtotal, taxCalculation, totalPrice } = useCartSummary(props.orders);
@@ -341,6 +348,62 @@ const reduceQuantity = (order: Menu) => {
 		if (order?.quantity === 0) {
 			emits('remove-cart', order);
 		}
+	}
+};
+
+const createOrder = async () => {
+	isLoading.value = true;
+	const params = props?.orders?.map((order) => {
+		return {
+			...order,
+			productId: parseInt(order?.id),
+			status: 'progress',
+		};
+	});
+
+	try {
+		const res = await $fetch('/api/orders', {
+			method: 'POST',
+			body: params,
+		});
+		Swal.fire({
+			toast: true,
+			position: 'bottom-end',
+			icon: 'success',
+			title: 'Pesanan Berhasil',
+			text: res?.message,
+			showConfirmButton: false,
+			timer: 3000,
+			timerProgressBar: true,
+			didOpen: (toast) => {
+				toast.addEventListener('mouseenter', Swal.stopTimer);
+				toast.addEventListener('mouseleave', Swal.resumeTimer);
+			},
+		});
+
+		if (res?.success) {
+			isLoading.value = false;
+			router.push('/');
+		}
+	} catch (e: any) {
+		isLoading.value = false;
+		console.log(e?.response?._data?.data?.message);
+		const message = e?.response?._data?.data?.message;
+		
+		Swal.fire({
+			toast: true,
+			icon: 'error',
+			title: 'Gagal Memproses Voucher',
+			position: 'top-end',
+			text: message,
+			showConfirmButton: false,
+			timerProgressBar: true,
+			timer: 3000,
+			didOpen: (toast) => {
+				toast.addEventListener('mouseenter', Swal.stopTimer);
+				toast.addEventListener('mouseleave', Swal.resumeTimer);
+			},
+		});
 	}
 };
 </script>

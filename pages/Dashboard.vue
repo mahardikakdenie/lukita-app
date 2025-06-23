@@ -86,6 +86,7 @@ const capitalizeWords = (str: string): string => {
     .replace(/\b\w/g, (char) => char.toUpperCase())
 }
 
+// Logika utama: cek route.query.category saat halaman pertama kali dimuat
 onMounted(async () => {
   let selectedCategory = 'Hidangan Utama'
 
