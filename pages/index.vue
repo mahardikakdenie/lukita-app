@@ -14,20 +14,11 @@
 				</div>
 
 				<div class="flex items-center justify-end">
-					<button
-						@click="$router.push('/dashboard')"
+					<button @click="$router.push('/dashboard')"
 						class="bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl px-5 py-2 transition-all duration-200 flex items-center gap-2">
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							fill="none"
-							viewBox="0 0 24 24"
-							stroke="currentColor"
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
 							class="w-4 h-4">
-							<path
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								stroke-width="2"
-								d="M12 4v16m8-8H4" />
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
 						</svg>
 						Buat Pesanan Baru
 					</button>
@@ -35,43 +26,43 @@
 			</div>
 
 			<!-- List Pesanan -->
-			<div
+			<div v-if="!pending && data && data.length > 0"
 				class="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-				<div
-					v-for="(summary, i) in summaries"
-					:key="i"
-					class="p-5 rounded-2xl shadow hover:shadow-xl bg-white border-l-4 transition-all duration-200"
+				<div v-for="(summary, i) in data" :key="i"
+					class="p-6 rounded-2xl shadow-md hover:shadow-lg bg-white border-l-4 transition-all duration-300"
 					:class="getStatusBorderColor(summary.status)">
-					<div class="mb-3">
-						<span class="text-xs text-gray-500">Nomor Pesanan</span>
-						<p class="text-lg font-bold text-blue-700">
-							{{ summary.no_order }}
-						</p>
-					</div>
-
-					<div class="mb-3">
-						<span class="text-xs text-gray-500">Status</span>
-						<span
-							class="inline-block text-xs font-semibold px-3 py-1 rounded-full mt-1 capitalize"
+					<!-- Header -->
+					<div class="flex justify-between items-start mb-4">
+						<h3 class="text-lg font-semibold text-gray-800">{{ summary.name }}</h3>
+						<span class="inline-flex items-center px-3 py-1 text-xs font-semibold rounded-full capitalize"
 							:class="getStatusColor(summary.status)">
 							{{ summary.status }}
 						</span>
 					</div>
 
-					<div class="mb-3">
-						<span class="text-xs text-gray-500">Estimasi</span>
-						<p class="text-sm font-medium text-gray-800">
-							{{ summary.time_estimation }}
-						</p>
+					<!-- Grid Info -->
+					<div class="grid grid-cols-2 gap-4 text-sm">
+						<div>
+							<span class="block text-xs text-gray-500">Order ID</span>
+							<p class="font-medium text-gray-800">#{{ summary.id }}</p>
+						</div>
+						<div class="text-right">
+							<span class="block text-xs text-gray-500">Quantity</span>
+							<p class="font-medium text-gray-800">{{ summary.quantity }}</p>
+						</div>
 					</div>
 
-					<div>
-						<span class="text-xs text-gray-500">Jumlah Order</span>
-						<p class="text-sm font-medium text-gray-800">
-							{{ summary.order_quantity }}
-						</p>
+					<!-- Action Button (Optional) -->
+					<div class="mt-5 pt-5 border-t border-gray-100 flex justify-end">
+						<button class="text-blue-600 hover:text-blue-800 text-sm font-medium cursor-pointer">
+							View Details →
+						</button>
 					</div>
 				</div>
+			</div>
+
+			<div v-if="pending" class="flex justify-center py-8">
+				<div class="loader"></div>
 			</div>
 
 			<!-- Catatan Kecil -->
@@ -87,14 +78,11 @@
 
 			<!-- Grid Menu -->
 			<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-				<div
-					v-for="menu in menus"
-					:key="menu.id"
+				<div v-for="menu in menus" :key="menu.id"
 					class="rounded-2xl bg-gray-50 hover:bg-gray-100 transition duration-200 shadow-sm hover:shadow-md flex flex-col justify-between h-full">
 					<div class="p-4">
 						<div class="flex gap-4">
-							<img
-								class="rounded-xl w-16 h-16 object-cover"
+							<img class="rounded-xl w-16 h-16 object-cover"
 								src="https://img.lovepik.com/png/20231126/thanksgiving-day-dish-icon-to-set-a-dinner-menu-i_704879_wh1200.png"
 								:alt="menu.name" />
 							<div class="flex flex-col justify-center">
@@ -108,23 +96,12 @@
 						</div>
 					</div>
 
-					<div
-						class="border-t border-gray-200 p-3 flex items-center justify-between">
-						<span
-							class="text-blue-600 text-sm font-medium cursor-pointer hover:underline"
-							>Lihat Semua</span
-						>
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							fill="none"
-							viewBox="0 0 24 24"
-							stroke="currentColor"
+					<div class="border-t border-gray-200 p-3 flex items-center justify-between">
+						<span class="text-blue-600 text-sm font-medium cursor-pointer hover:underline">Lihat
+							Semua</span>
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
 							class="w-5 h-5 text-blue-600">
-							<path
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								stroke-width="2"
-								d="M9 5l7 7-7 7" />
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
 						</svg>
 					</div>
 				</div>
@@ -135,6 +112,7 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
+import type { Order } from '~/types/interfaces/OrderInterface';
 
 // Interface untuk pesanan
 interface Summary {
@@ -165,6 +143,12 @@ const summaries = ref<Summary[]>([
 		order_quantity: '1',
 	},
 ]);
+
+const { data, pending } = useAsyncData<Order[]>('orders', async () => {
+	const orders = await $fetch<Order[]>('/api/orders');
+
+	return orders;
+});
 
 // Interface untuk menu
 interface Menu {
@@ -216,7 +200,7 @@ const menus = ref<Menu[]>([
 // Fungsi warna badge status
 const getStatusColor = (status: string) => {
 	switch (status) {
-		case 'Dalam Antrian':
+		case 'progress':
 			return 'bg-yellow-100 text-yellow-800';
 		case 'Sedang Dimasak':
 			return 'bg-blue-100 text-blue-800';
@@ -247,6 +231,7 @@ const getStatusBorderColor = (status: string) => {
 .card-leave-active {
 	transition: all 0.3s ease-in-out;
 }
+
 .card-enter-from,
 .card-leave-to {
 	opacity: 0;
