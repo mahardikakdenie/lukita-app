@@ -177,7 +177,7 @@
 									{{ menu.name }}
 								</p>
 								<p class="text-sm text-gray-500">
-									{{ menu.items }} item
+									{{ summaryData[menu.key] }} item
 								</p>
 							</div>
 						</div>
@@ -337,6 +337,16 @@ const { data, pending } = useAsyncData<Order[]>('orders', async () => {
 	return orders;
 });
 
+// Untuk products
+const {
+  data: summaryData,
+  pending: summaryPending,
+  refresh: refreshsummary
+} = useAsyncData<any>('products/summary', async () => {
+  const products = await $fetch<any>('/api/products/summary');
+  return products;
+});
+
 // Interface untuk menu
 interface Menu {
 	id: number;
@@ -364,38 +374,44 @@ const openModal = (orderData: Order) => {
 	selectedStatus.value = orderData.status;
 };
 
-const menus = ref<Menu[]>([
+const menus = ref<any>([
 	{
 		id: 1,
 		name: 'Hidangan Utama',
+		key: 'hidangan_utama',
 		items: '15',
 		image: 'https://example.com/menu-utama.jpg',
 	},
 	{
 		id: 2,
 		name: 'Minuman',
+		key: 'minuman',
 		items: '8',
 		image: 'https://example.com/minuman.jpg',
 	},
 	{
 		id: 3,
 		name: 'Pencuci Mulut',
+		key: 'pencuci_mulut',
 		items: '5',
 		image: 'https://example.com/dessert.jpg',
 	},
 	{
 		id: 4,
 		name: 'Paket Promo',
+		key: 'paket_promo',
 		items: '3',
 		image: 'https://example.com/promo.jpg',
 	},
 	{
 		id: 5,
 		name: 'Hidangan Pembuka',
+		key: 'hidangan_pembuka',
 		items: '10',
 		image: 'https://example.com/appetizer.jpg',
 	},
 	{
+		key: 'menu_musiman',
 		id: 6,
 		name: 'Menu Musiman',
 		items: '5',
