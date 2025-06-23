@@ -148,16 +148,12 @@
 
 					<div class="grid grid-cols-2 gap-4 text-sm">
 						<div>
-							<span class="block text-xs text-gray-500">Tanggal</span>
-							<p class="text-gray-800">{{ order?.createdAt }}</p>
-						</div>
-						<div>
 							<span class="block text-xs text-gray-500">Jumlah</span>
 							<p class="text-gray-800">{{ order?.quantity }}</p>
 						</div>
 						<div>
 							<span class="block text-xs text-gray-500">Harga</span>
-							<p class="text-gray-800">{{ order?.price }}</p>
+							<p class="text-gray-800">{{ formatToRupiah(order?.price.toString() ?? '') }}</p>
 						</div>
 						<div>
 							<span class="block text-xs text-gray-500">Kategori</span>
