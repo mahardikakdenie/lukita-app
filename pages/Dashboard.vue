@@ -60,19 +60,16 @@ const { data, pending, refresh } = useAsyncData<Menu[]>(
   }
 )
 
-// Fungsi ketika kategori berubah
 const onChangeMenu = (menu: string) => {
   currentMenu.value = menu
   const category = currentMenu.value.split(' ').join('-').toLowerCase()
   router.push({ query: { ...route.query, category } })
 }
 
-// Fungsi tambah ke keranjang
 const addToCarts = (product: Menu) => {
   addToCart(product)
 }
 
-// Fungsi hapus dari keranjang
 const onRemoveCart = (cartProduct: Menu) => {
   const indexCart = carts.value?.findIndex(
     (cart) => cart?.name === cartProduct?.name
@@ -89,7 +86,6 @@ const capitalizeWords = (str: string): string => {
     .replace(/\b\w/g, (char) => char.toUpperCase())
 }
 
-// Logika utama: cek route.query.category saat halaman pertama kali dimuat
 onMounted(async () => {
   let selectedCategory = 'Hidangan Utama'
 
