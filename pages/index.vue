@@ -54,7 +54,7 @@
 
 					<!-- Action Button (Optional) -->
 					<div class="mt-5 pt-5 border-t border-gray-100 flex justify-end">
-						<button class="text-blue-600 hover:text-blue-800 text-sm font-medium cursor-pointer">
+						<button class="text-blue-600 hover:text-blue-800 text-sm font-medium cursor-pointer" @click="openModal(summary)">
 							View Details →
 						</button>
 					</div>
@@ -107,6 +107,57 @@
 				</div>
 			</div>
 		</section>
+
+		<teleport to="body">
+			<Modal :is-open="isModal" title="Order Detail" @on-close="isModal = false">
+				 <!-- Slot: Detail Order -->
+      <div class="space-y-4">
+        <div class="flex items-center gap-4">
+          <img :src="order?.image" alt="Product Image" class="w-16 h-16 object-cover rounded-md" />
+          <div>
+            <h3 class="font-semibold text-gray-800">{{ order?.name }}</h3>
+            <p class="text-sm text-gray-600">ID: {{ order?.id }}</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4 text-sm">
+          <div>
+            <span class="block text-xs text-gray-500">Tanggal</span>
+            <p class="text-gray-800">{{ order?.createdAt }}</p>
+          </div>
+          <div>
+            <span class="block text-xs text-gray-500">Jumlah</span>
+            <p class="text-gray-800">{{ order?.quantity }}</p>
+          </div>
+          <div>
+            <span class="block text-xs text-gray-500">Harga</span>
+            <p class="text-gray-800">{{ order?.price }}</p>
+          </div>
+          <div>
+            <span class="block text-xs text-gray-500">Kategori</span>
+            <p class="text-gray-800">{{ order?.type }}</p>
+          </div>
+        </div>
+
+        <!-- Status Form -->
+        <div>
+          <label for="status" class="block text-sm font-medium text-gray-700 mb-1">Status Saat Ini:</label>
+          <select
+            v-model="selectedStatus"
+            id="status"
+            class="w-full border border-gray-300 rounded-md p-2 text-sm focus:ring-blue-500 focus:border-blue-500"
+          >
+            <option value="pending">Pending</option>
+            <option value="progress">Progress</option>
+            <option value="shipped">Shipped</option>
+            <option value="completed">Completed</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
+        </div>
+      </div>
+
+			</Modal>	
+		</teleport>
 	</div>
 </template>
 
@@ -122,27 +173,9 @@ interface Summary {
 	order_quantity: string;
 }
 
-// Data dummy untuk daftar pesanan
-const summaries = ref<Summary[]>([
-	{
-		no_order: '#001',
-		status: 'Dalam Antrian',
-		time_estimation: '20 Menit',
-		order_quantity: '3',
-	},
-	{
-		no_order: '#002',
-		status: 'Sedang Dimasak',
-		time_estimation: '12 Menit',
-		order_quantity: '2',
-	},
-	{
-		no_order: '#003',
-		status: 'Selesai',
-		time_estimation: '0 Menit',
-		order_quantity: '1',
-	},
-]);
+
+const isModal = ref<boolean>(false);
+const selectedStatus = ref<string>('');
 
 const { data, pending } = useAsyncData<Order[]>('orders', async () => {
 	const orders = await $fetch<Order[]>('/api/orders');
@@ -157,6 +190,14 @@ interface Menu {
 	items: string;
 	image: string;
 }
+
+const order = ref<Order | null>(null);
+
+const openModal = (orderData: Order) => {
+	order.value = orderData;
+	isModal.value = !isModal.value;
+	selectedStatus.value = orderData.status;
+};
 
 const menus = ref<Menu[]>([
 	{
