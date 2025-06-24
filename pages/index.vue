@@ -85,29 +85,32 @@
 						</div>
 					</div>
 
-					<!-- Harga dan Diskon -->
 					<div class="space-y-2 text-sm mb-5">
-						<div class="flex justify-between items-center">
-							<span class="text-xs text-gray-500"
-								>Harga Satuan</span
-							>
-							<p class="font-semibold text-gray-900 text-xs">
-								{{ summary.type_discount }}
-							</p>
-						</div>
-						<div class="flex justify-between items-center">
+						<!-- Diskon (hanya muncul jika ada) -->
+						<div
+							v-if="
+								summary.type_discount && summary.discount_price
+							"
+							class="flex justify-between items-center">
 							<span class="text-xs text-gray-500"
 								>Diskon / Potongan</span
 							>
-							<p class="font-semibold text-gray-900 text-xs">
+							<p class="font-semibold text-red-600 text-xs">
+								-
 								{{
 									formatToRupiah(
-										summary.discount_price?.toString() ||
-											'0'
+										summary.discount_price.toString()
 									)
 								}}
 							</p>
 						</div>
+
+						<!-- Placeholder jika tidak ada diskon -->
+						<div
+							v-else
+							class="flex justify-between items-center h-5"></div>
+
+						<!-- Total -->
 						<div
 							class="flex justify-between items-center pt-2 border-t border-gray-100 mt-1">
 							<span class="text-xs text-gray-600 font-medium"
@@ -177,7 +180,7 @@
 									{{ menu.name }}
 								</p>
 								<p class="text-sm text-gray-500">
-									{{ summaryData[menu.key] }} item
+									{{ summaryData?.[menu.key] ?? 0 }} item
 								</p>
 							</div>
 						</div>
@@ -213,7 +216,8 @@
 			<Modal
 				:is-open="isModal"
 				title="Order Detail"
-				@on-close="isModal = false">
+				@on-close="isModal = false"
+				@confirm="updateOrder">
 				<!-- Slot: Detail Order -->
 				<div class="space-y-6">
 					<!-- Form Update Status -->
@@ -317,6 +321,7 @@
 
 <script lang="ts" setup>
 import { NuxtLink } from '#components';
+import Swal from 'sweetalert2';
 import { ref } from 'vue';
 import type { Order } from '~/types/interfaces/OrderInterface';
 
@@ -339,12 +344,12 @@ const { data, pending } = useAsyncData<Order[]>('orders', async () => {
 
 // Untuk products
 const {
-  data: summaryData,
-  pending: summaryPending,
-  refresh: refreshsummary
+	data: summaryData,
+	pending: summaryPending,
+	refresh: refreshsummary,
 } = useAsyncData<any>('products/summary', async () => {
-  const products = await $fetch<any>('/api/products/summary');
-  return products;
+	const products = await $fetch<any>('/api/products/summary');
+	return products;
 });
 
 // Interface untuk menu
@@ -360,12 +365,8 @@ const order = ref<Order | null>(null);
 const statusOptions = ref<string[]>([
 	'pending',
 	'progress',
-	'ready',
-	'on_delivery',
 	'completed',
 	'cancelled',
-	'rejected',
-	'refunded',
 ]);
 
 const openModal = (orderData: Order) => {
@@ -422,12 +423,14 @@ const menus = ref<any>([
 // Fungsi warna badge status
 const getStatusColor = (status: string) => {
 	switch (status) {
-		case 'progress':
+		case 'pending':
 			return 'bg-yellow-100 text-yellow-800';
-		case 'Sedang Dimasak':
+		case 'progress':
 			return 'bg-blue-100 text-blue-800';
-		case 'Selesai':
+		case 'completed':
 			return 'bg-green-100 text-green-800';
+		case 'cancelled':
+			return 'bg-red-100 text-red-800';
 		default:
 			return 'bg-gray-100 text-gray-800';
 	}
@@ -452,6 +455,44 @@ const capitalizeWords = (str: string): string => {
 	return str
 		.replace(/-/g, ' ')
 		.replace(/\b\w/g, (char) => char.toUpperCase());
+};
+
+const isLoadingUpdate = ref<boolean>(false);
+const updateOrder = async () => {
+	isLoadingUpdate.value = true;
+    const params = {
+		status: selectedStatus.value, // ✅ Sudah benar
+    };
+
+    const res = await $fetch(`/api/orders/${order?.value?.id ?? ''}`, {
+		method: 'PUT',
+        body: params,
+    });
+    isModal.value = false;
+	
+    if (res?.success) {
+		isLoadingUpdate.value = false;
+        const index = data.value?.findIndex(orderItem => orderItem?.id === order?.value?.id) ?? -1;
+
+        if (index !== -1 && data?.value?.[index]) {
+            data.value[index].status = selectedStatus.value;
+
+			Swal.fire({
+				toast: true,
+				position: 'bottom-end',
+				icon: 'success',
+				title: 'Status Pesanan Berhasil Di Update',
+				text: res?.message,
+				showConfirmButton: false,
+				timer: 3000,
+				timerProgressBar: true,
+				didOpen: (toast) => {
+					toast.addEventListener('mouseenter', Swal.stopTimer);
+					toast.addEventListener('mouseleave', Swal.resumeTimer);
+				},
+		});
+        }
+    }
 };
 </script>
 

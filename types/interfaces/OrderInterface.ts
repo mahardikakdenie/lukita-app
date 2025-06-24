@@ -1,6 +1,7 @@
 import type { Menu } from "~/components/HomeContent/index.vue";
 
 export interface Order {
+	[x: string]: any;
     id: string;
     createdAt: string;
     image: string;

@@ -10,7 +10,7 @@
       <!-- Close Button -->
       <button
         @click="close"
-        class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 focus:outline-none"
+        class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 focus:outline-none cursor-pointer"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -56,7 +56,8 @@
           @click="$emit('confirm')"
           class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors"
         >
-          Konfirmasi
+         <div v-if="isLoading" class="loader"></div>
+          <span v-else>Konfirmasi</span>
         </button>
       </div>
     </div>
@@ -67,6 +68,7 @@
 const props = defineProps<{
 	isOpen: boolean;
 	title?: string;
+    isLoading?: false;
 }>();
 
 const emit = defineEmits<{
