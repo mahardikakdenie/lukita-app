@@ -11,7 +11,7 @@
 					<p class="mt-4 text-gray-600">Memuat layout...</p>
 				</div>
 			</div>
-			<div v-if="activeLayout === 'default' && layoutReady">
+			<div v-if="activeLayout === 'laukita' && layoutReady">
 				<!-- SECTION: Pesanan Saat Ini -->
 				<section class="p-6 bg-white rounded-2xl shadow-lg">
 					<div
