@@ -376,13 +376,11 @@ const layoutReady = ref(false); // ✅ Tambahkan
 
 const url = useRequestURL();
 onBeforeMount(() => {
-	console.log('pathname : ', url);
 	const hostname = url.hostname;
 	// Pisahkan subdomain
 	const parts = hostname.split('.');
 	const subdomain = parts.length > 2 ? parts[0] : null;
 
-	console.log('Subdomain:', subdomain);
 	let layout = config.public.defaultLayout;
 	if (subdomain && AVAILABLE_LAYOUTS.includes(subdomain as AvailableLayout)) {
 		layout = subdomain;
