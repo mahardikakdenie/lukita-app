@@ -16,6 +16,10 @@ export default defineNuxtConfig({
   runtimeConfig:{
     public: {
       apiBaseUrl: process.env.VITE_API_BASE_URL || 'https://default-api-url.com', 
+      defaultLayout: process.env.NUXT_PUBLIC_DEFAULT_LAYOUT,
     }
-  }
+  },
+  devServer: {
+		port: 3002,
+	},
 })

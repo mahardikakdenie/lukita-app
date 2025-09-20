@@ -1,9 +1,9 @@
 <template>
 	<div>
 		<!-- Ganti 'headers' dengan 'Header' jika memang itu komponenmu -->
-		<Headers />
+		<!-- <Headers /> -->
 
-		<main class="max-w-screen-2xl mx-auto px-6 py-8">
+		<main class="">
 			<NuxtPage />
 		</main>
 	</div>
