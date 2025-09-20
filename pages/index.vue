@@ -205,9 +205,7 @@
 											{{ menu.name }}
 										</p>
 										<p class="text-sm text-gray-500">
-											{{
-												summaryData?.[menu.key] ?? 0
-											}}
+											{{ summaryData?.[menu.key] ?? 0 }}
 											item
 										</p>
 									</div>
@@ -376,10 +374,19 @@ const isOddoTheme = computed(() => activeLayout.value === 'oddo-themes');
 // Di <script setup>
 const layoutReady = ref(false); // ✅ Tambahkan
 
+const url = useRequestURL();
 onBeforeMount(() => {
-	let layout = config.public.defaultLayout;
+	console.log('pathname : ', url);
+	const hostname = url.hostname;
+	// Pisahkan subdomain
+	const parts = hostname.split('.');
+	const subdomain = parts.length > 2 ? parts[0] : null;
 
-	if (!AVAILABLE_LAYOUTS.includes(layout as AvailableLayout)) {
+	console.log('Subdomain:', subdomain);
+	let layout = config.public.defaultLayout;
+	if (subdomain && AVAILABLE_LAYOUTS.includes(subdomain as AvailableLayout)) {
+		layout = subdomain;
+	} else if (!AVAILABLE_LAYOUTS.includes(layout as AvailableLayout)) {
 		layout = 'default';
 	}
 
