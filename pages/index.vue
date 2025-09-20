@@ -4,7 +4,7 @@
 		<ClientOnly>
 			<div
 				v-if="!layoutReady"
-				class="flex items-center justify-center min-h-screen bg-gray-50">
+				class="flex items-center justify-center min-h-screen bg-gray-900 absolute">
 				<div class="text-center">
 					<div
 						class="w-12 h-12 border-4 border-t-indigo-600 border-gray-300 rounded-full animate-spin mx-auto"></div>
@@ -364,7 +364,7 @@ import type { Order } from '~/types/interfaces/OrderInterface';
 
 const route = useRoute();
 const config = useRuntimeConfig();
-const AVAILABLE_LAYOUTS = ['default', 'oddo-themes'] as const;
+const AVAILABLE_LAYOUTS = ['default', 'oddo-themes', 'laukita'] as const;
 type AvailableLayout = (typeof AVAILABLE_LAYOUTS)[number];
 
 // // ✅ Gunakan ref reaktif, bukan route.meta.layout
@@ -388,7 +388,7 @@ onBeforeMount(() => {
 		layout = 'default';
 	}
 
-	activeLayout.value = layout; // ✅ Tetap di sini, untuk render template
+	activeLayout.value = layout;
 	layoutReady.value = true;
 });
 

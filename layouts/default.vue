@@ -1,9 +1,20 @@
 <template>
 	<div>
 		<!-- Ganti 'headers' dengan 'Header' jika memang itu komponenmu -->		
-		<Headers />
-		<main class="max-w-screen-2xl mx-auto px-6 py-8">
-			<NuxtPage />
+		<!-- <Headers /> -->
+		<main class="mx-auto px-6 py-8 w-full">
+			<div
+				class="flex items-center justify-center min-h-screen bg-gray-50">
+				<div class="text-center">
+					<!-- <div
+						class="w-12 h-12 border-4 border-t-indigo-600 border-gray-300 rounded-full animate-spin mx-auto"></div> -->
+						<div>
+							<img src="/loading.gif" alt="" srcset="">
+						</div>
+					<p class="mt-4 text-gray-600">Memuat layout...</p>
+				</div>
+			</div>
+			<nuxt-page />
 		</main>
 	</div>
 </template>
