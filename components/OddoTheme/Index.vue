@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { useRoute } from 'vue-router';
+import type { Menu } from '../HomeContent/index.vue';
 
 const route = useRoute();
 
@@ -60,6 +61,21 @@ const formatToRupiah = (angka: string): string => {
 	}).format(nilai);
 };
 
+// Fetch produk secara reaktif + SSR support
+const { data, pending, refresh } = useAsyncData<Menu[]>(
+  'products',
+  async () => {
+    const products = await $fetch<Menu[]>('/api/products', {
+    //   params: { category },
+    })
+    return products
+  },
+//   {
+//     watch: [currentMenu],
+//   }
+)
+
+
 // Computed
 const currentLayout = computed(() => route.meta.layout);
 const isOddoTheme = computed(() => currentLayout.value === 'oddo-themes');
@@ -96,10 +112,10 @@ const glowButton = (event: MouseEvent) => {
 <template>
 	<div class="min-h-screen bg-gray-50 p-4">
 		<div class="mx-auto">
-			<div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+			<div class="grid grid-cols-1 lg:grid-cols-12 gap-6 relative">
 				<!-- Sidebar: Cart + Keypad (Clean Version) -->
-				<div class="col-span-3">
-					<div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-5 h-full flex flex-col">
+				<div class="col-span-3 relative flex justify-center">
+					<div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-5 flex flex-col fixed w-1/5">
 
 						<!-- Cart Items -->
 						<div class="flex-1 overflow-y-auto mb-5 pr-1">
@@ -234,19 +250,13 @@ const glowButton = (event: MouseEvent) => {
 
 						<!-- Product Grid -->
 						<div class="flex-1 overflow-y-auto hide-scrollbar pb-4">
-							<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-4">
+							<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-6">
 								<div
-									v-for="product in [
-										{ id: 1, name: 'Nasi Goreng Seafood', price: 35000, image: 'https://sanex.co.id/wp-content/uploads/2024/11/2734.jpg' },
-										{ id: 2, name: 'Es Teh Manis', price: 8000, image: 'https://cnc-magazine.oramiland.com/parenting/images/Es_Tambring_hot.liputan6.com.width-800.format-webp.webp' },
-										{ id: 3, name: 'Ayam Goreng', price: 25000, image: 'https://asset.kompas.com/crops/4QxS0jKQqzV7qk5nXZvY6oQjR4I=/0x0:998x665/750x500/data/photo/2023/03/07/64072e0b2d6a7.jpg' },
-										{ id: 4, name: 'Jus Alpukat', price: 15000, image: 'https://img.lovepik.com/free-png/20211209/lovepik-avocado-juice-png-image_401401828_wh860.png' },
-										{ id: 5, name: 'Paket Nasi + Ayam', price: 40000, image: 'https://cdn.idntimes.com/content-images/post/20200813/1-1-d54d1e8556322633847385540915013e_600x400.jpg' },
-									]"
+									v-for="product in data"
 									:key="product.id"
 									class="group bg-white rounded-xl border border-gray-200 hover:shadow-md transition cursor-pointer"
 								>
-									<div class="h-28 overflow-hidden rounded-t-xl">
+									<div class="h-36 overflow-hidden rounded-t-xl">
 										<img
 											:src="product.image"
 											:alt="product.name"
