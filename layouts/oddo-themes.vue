@@ -1,9 +1,6 @@
 <template>
 	<div>
-		<!-- Ganti 'headers' dengan 'Header' jika memang itu komponenmu -->
-		<!-- <Headers /> -->
-
-		<main class="">
+		<main>
 			<NuxtPage />
 		</main>
 	</div>
@@ -20,12 +17,3 @@ useSeoMeta({
 	twitterCard: 'summary_large_image',
 });
 </script>
-
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
-
-* {
-	font-family: 'Poppins', sans-serif;
-}
-
-</style>

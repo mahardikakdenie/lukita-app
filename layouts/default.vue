@@ -1,20 +1,7 @@
 <template>
 	<div>
-		<!-- Ganti 'headers' dengan 'Header' jika memang itu komponenmu -->		
-		<!-- <Headers /> -->
-		<main class="mx-auto px-6 py-8 w-full">
-			<div
-				class="flex items-center justify-center min-h-screen bg-gray-50">
-				<div class="text-center">
-					<!-- <div
-						class="w-12 h-12 border-4 border-t-indigo-600 border-gray-300 rounded-full animate-spin mx-auto"></div> -->
-						<div>
-							<img src="/loading.gif" alt="" srcset="">
-						</div>
-					<p class="mt-4 text-gray-600">Memuat layout...</p>
-				</div>
-			</div>
-			<nuxt-page />
+		<main class="mx-auto w-full px-6 py-8">
+			<NuxtPage />
 		</main>
 	</div>
 </template>
@@ -32,10 +19,9 @@ useSeoMeta({
 </script>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
 
 * {
-	font-family: 'Poppins', sans-serif;
+	font-family: 'Plus Jakarta Sans', sans-serif;
 }
-
 </style>

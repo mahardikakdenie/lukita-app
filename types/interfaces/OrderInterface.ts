@@ -3,16 +3,21 @@ import type { Menu } from "~/components/HomeContent/index.vue";
 export interface Order {
 	[x: string]: any;
     id: string;
-    createdAt: string;
-    image: string;
-    name: string;
-    type: string;
-    price: string;
+    createdAt?: string;
+    image?: string;
+    name?: string;
+    type?: string;
+    price?: string;
     status: string;
-    productId: string;
-    quantity: number;
+    productId?: string;
+    quantity?: number;
     total_price?: string;
     discount_price?: number;
     products?: Menu[],
-    type_discount: string;
+    type_discount?: string;
+    // Customer self-order fields
+    source?: 'cashier' | 'customer';
+    table_number?: string;
+    customer_name?: string;
+    note?: string;
 }

@@ -1,4 +1,4 @@
-<template>
+﻿<template>
 	<div class="space-y-8">
 		<!-- LOADING STATE -->
 		<ClientOnly>
@@ -344,10 +344,23 @@
 					</Modal>
 				</teleport>
 			</div>
-			<OddoTheme v-if="isOddoTheme && layoutReady" />
+			<Transition name="fade" mode="out-in">
+				<OddoTheme v-if="isOddoTheme && layoutReady" />
+			</Transition>
 		</ClientOnly>
 	</div>
 </template>
+
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+	transition: opacity 0.3s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+	opacity: 0;
+}
+</style>
 
 <script lang="ts" setup>
 import type { LayoutKey } from '#build/types/layouts';
@@ -666,3 +679,4 @@ const updateOrder = async () => {
 	transform: translateY(10px);
 }
 </style>
+

@@ -1,4 +1,4 @@
-import { Menu } from "~/components/HomeContent/index.vue";
+import type { Menu } from "~/components/HomeContent/index.vue";
 
 export default defineEventHandler(async (event) => {
 	const { category }: { category: string } = getQuery(event);
